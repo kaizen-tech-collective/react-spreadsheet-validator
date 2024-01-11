@@ -1,0 +1,44 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true,
+        "mocha": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/eslint-recommended"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "react/prop-types": "off",
+        "react/no-unescaped-entities": "off",
+        "react/display-name": "off",
+        "no-unused-vars": "off",
+        "no-debugger": "off",
+        "no-ex-assign": "off",
+        "no-empty-pattern": "off",
+        "prefer-const": "warn"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+            // Tells eslint-plugin-react to automatically detect the version of React to use
+        }
+    }
+}
