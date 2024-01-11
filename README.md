@@ -1,4 +1,8 @@
-# file-validator-component ⚡ 
+# file-validator-component ⚡
+
+
+![license](https://img.shields.io/badge/license-MIT-green)
+[![npm](https://img.shields.io/badge/npm-0.1.5-blue)](https://www.npmjs.com/package/file-validator-component)
 
 A component used for importing XLS / XLSX / CSV documents built with [**Material UI**](https://mui.com/). Import flow combines:
 
@@ -14,6 +18,12 @@ A component used for importing XLS / XLSX / CSV documents built with [**Material
 - Custom validation rules - make sure valid data is being imported, easily spot and correct errors
 - Hooks - alter raw data after upload or make adjustments on data changes
 - Auto-mapping columns - automatically map most likely value to your template values, e.g. `name` -> `firstName`
+
+## Installation
+
+```bash
+npm i file-validator-component
+```
 
 ## Contributing
 
