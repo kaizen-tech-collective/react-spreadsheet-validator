@@ -126,11 +126,11 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
             checked={filterByErrors}
             onChange={() => setFilterByErrors(!filterByErrors)}
           />
-            <FormLabel component="legend">{translations.validationStep.filterSwitchTitle}</FormLabel>
+          <FormLabel component="legend">{translations.validationStep.filterSwitchTitle}</FormLabel>
         </Box>
       </Box>
       <Box sx={{ h: 0, flexGrow: 1 }}>
-        <Table
+        {/* <Table
           rowKeyGetter={rowKeyGetter}
           rows={tableData}
           onRowsChange={updateRow}
@@ -146,7 +146,7 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
               </Box>
             ),
           }}
-        />
+        /> */}
       </Box>
       <Box
         sx={{

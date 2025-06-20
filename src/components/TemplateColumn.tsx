@@ -9,7 +9,7 @@ import * as React from 'react';
 import { Accordion, AccordionSummary, Box, Grid } from '@mui/material';
 import Button from '@mui/material/Button';
 import { MatchColumnSelect } from './MatchColumnSelect';
-import {FaCheckCircle, FaCircle, FaCircleNotch, FaRegCircle} from 'react-icons/fa';
+import { FaCheckCircle, FaCircle, FaCircleNotch, FaRegCircle } from 'react-icons/fa';
 
 const getAccordionTitle = <T extends string>(fields: Fields<T>, column: Column<T>, translations: Translations) => {
   const fieldLabel = fields.find(field => 'value' in column && field.key === column.value)!.label;
@@ -43,7 +43,7 @@ export const TemplateColumn = <T extends string>({ column, onChange, onSubChange
       ) : (
         <>
           <Grid container>
-            <Grid item xs={10}>
+            <Grid size={10}>
               <MatchColumnSelect
                 placeholder={translations.matchColumnsStep.selectPlaceholder}
                 value={selectValue}
@@ -52,8 +52,12 @@ export const TemplateColumn = <T extends string>({ column, onChange, onSubChange
                 name={column.header}
               />
             </Grid>
-            <Grid item xs={2} display={'flex'} style={{ alignItems: 'center', justifyContent: 'center' }}>
-              {isChecked ? <FaCheckCircle color={'green'} size="1.5rem" /> : <FaRegCircle size="1.5rem" color={'orange'}/>}
+            <Grid size={2} display={'flex'} style={{ alignItems: 'center', justifyContent: 'center' }}>
+              {isChecked ? (
+                <FaCheckCircle color={'green'} size="1.5rem" />
+              ) : (
+                <FaRegCircle size="1.5rem" color={'orange'} />
+              )}
             </Grid>
           </Grid>
           {isSelect && (

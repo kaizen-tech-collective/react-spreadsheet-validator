@@ -1,8 +1,10 @@
-import { useMemo } from 'react';
-import { generateColumns } from './columns';
-import { Table } from './Table';
-import { Field, Fields } from '../types';
 import * as React from 'react';
+
+import { DataGrid } from '@mui/x-data-grid';
+
+import { Field, Fields } from '../types';
+
+import { generateColumns } from './columns';
 
 interface Props<T extends string> {
   fields: Fields<T>;
@@ -14,27 +16,31 @@ const titleMap: Record<Field<string>['fieldType']['type'], string> = {
   input: 'Text',
 };
 
-export const generateExampleRow = <T extends string>(fields: Fields<T>) => [
-  fields.reduce(
-    (acc, field) => {
-      acc[field.key as T] = field.example || titleMap[field.fieldType.type];
-      return acc;
+export const generateExampleRow = <T extends string>(fields: Fields<T>) => {
+  const exampleRow: Record<string, string> = {};
+
+  for (const field of fields) {
+    const { key, example, fieldType } = field;
+    exampleRow[key] = example ?? titleMap[fieldType.type];
+  }
+
+  return [
+    {
+      id: 1,
+      ...exampleRow,
     },
-    {} as Record<T, string>,
-  ),
-];
+  ];
+};
 
 export const ExampleTable = <T extends string>({ fields }: Props<T>) => {
-  const data = useMemo(() => generateExampleRow(fields), [fields]);
-  const columns = useMemo(() => generateColumns(fields), [fields]);
+  const rows = React.useMemo(() => {
+    return generateExampleRow(fields);
+  }, [fields]);
+  const columns = React.useMemo(() => {
+    return generateColumns(fields);
+  }, [fields]);
 
   return (
-    <Table
-      rows={data}
-      columns={columns}
-      style={{
-        borderBottom: 'none',
-      }}
-    />
+    <DataGrid rows={rows} columns={columns} hideFooter disableColumnSorting disableColumnFilter disableColumnMenu />
   );
 };

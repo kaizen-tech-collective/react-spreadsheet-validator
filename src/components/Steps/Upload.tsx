@@ -1,10 +1,12 @@
-import { Box, Grid } from '@mui/material';
 import * as React from 'react';
-import { useCallback, useState } from 'react';
-import { useRsi } from '../../hooks/useRsi';
+// import { inspect } from 'util';
 import XLSX from 'xlsx-ugnis';
+
+import Box from '@mui/material/Box';
+// import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import { inspect } from 'util';
+
+import { useRsi } from '../../hooks/useRsi';
 import { ExampleTable } from '../ExampleTable';
 import { DropZone } from '../DropZone';
 
@@ -27,10 +29,10 @@ export const FadingOverlay = () => (
 );
 
 const Upload = ({ onContinue }: UploadProps) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
   // const styles = useStyleConfig("UploadStep") as (typeof themeOverrides)["components"]["UploadStep"]["baseStyle"]
   const { translations, fields } = useRsi();
-  const handleOnContinue = useCallback(
+  const handleOnContinue = React.useCallback(
     async (data: XLSX.WorkBook, file: File) => {
       setIsLoading(true);
       await onContinue(data, file);
@@ -38,6 +40,7 @@ const Upload = ({ onContinue }: UploadProps) => {
     },
     [onContinue],
   );
+  console.log('fields: ', fields);
   return (
     <>
       <Typography variant={'h4'} gutterBottom>
@@ -47,7 +50,7 @@ const Upload = ({ onContinue }: UploadProps) => {
       <Typography gutterBottom variant={'body1'}>
         {translations.uploadStep.manifestDescription}
       </Typography>
-      <Box sx={{ mb: '0.1rem', position: 'relative', height: '72px' }}>
+      <Box sx={{ mb: '0.1rem', position: 'relative', height: '102px' }}>
         <ExampleTable fields={fields} />
         <FadingOverlay />
       </Box>

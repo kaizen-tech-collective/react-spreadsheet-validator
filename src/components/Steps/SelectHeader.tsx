@@ -30,9 +30,11 @@ export const SelectHeaderStep = ({ data, onContinue }: SelectHeaderProps) => {
 
   return (
     <>
-      <Typography variant={'h4'} gutterBottom>{translations.selectHeaderStep.title}</Typography>
+      <Typography variant={'h4'} gutterBottom>
+        {translations.selectHeaderStep.title}
+      </Typography>
       <Box sx={{ h: 0, flexGrow: 1 }}>
-        <SelectHeaderTable data={data} selectedRows={selectedRows} setSelectedRows={setSelectedRows} />
+        {/* <SelectHeaderTable data={data} selectedRows={selectedRows} setSelectedRows={setSelectedRows} /> */}
       </Box>
       {isLoading ? (
         <>{'Loading...'}</>

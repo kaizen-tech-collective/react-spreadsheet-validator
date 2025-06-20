@@ -78,18 +78,78 @@ const fields = [
       },
     ],
   },
+  {
+    // Visible in table header and when matching columns.
+    label: 'Team',
+    // This is the key used for this field when we call onSubmit.
+    key: 'team',
+    // Used when editing and validating information.
+    fieldType: {
+      // There are 3 types - "input" / "checkbox" / "select".
+      type: 'input',
+    },
+    // Used in the first step to provide an example of what data is expected in this field. Optional.
+    example: 'Team One',
+    // Can have multiple validations that are visible in Validation Step table.
+    validations: [
+      {
+        // Can be "required" / "unique" / "regex"
+        rule: 'required',
+        errorMessage: 'Team is required',
+        // There can be "info" / "warning" / "error" levels. Optional. Default "error".
+        level: 'error',
+      },
+    ],
+  },
+  {
+    // Visible in table header and when matching columns.
+    label: 'Is Manager',
+    // This is the key used for this field when we call onSubmit.
+    key: 'isManager',
+    // Used when editing and validating information.
+    fieldType: {
+      // There are 3 types - "input" / "checkbox" / "select".
+      type: 'checkbox',
+    },
+    // Used in the first step to provide an example of what data is expected in this field. Optional.
+    example: 'true',
+    // Can have multiple validations that are visible in Validation Step table.
+    validations: [
+      {
+        // Can be "required" / "unique" / "regex"
+        rule: 'required',
+        errorMessage: 'Is Manager is required',
+        // There can be "info" / "warning" / "error" levels. Optional. Default "error".
+        level: 'error',
+      },
+    ],
+  },
 ] as const;
 
 export const App = () => {
   const [open, setOpen] = useState<boolean>(false);
   return (
     <>
-      <Button variant={'contained'} onClick={() => setOpen(true)}>Open Flow</Button>
+      <Button
+        variant="contained"
+        onClick={() => {
+          return setOpen(true);
+        }}
+      >
+        Open Flow
+      </Button>
       <ReactSpreadsheetImport
         isOpen={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          return setOpen(false);
+        }}
         fields={fields}
-        onSubmit={(data, file) => console.log(data)}
+        onSubmit={(
+          data,
+          // file
+        ) => {
+          return console.log(data);
+        }}
       />
     </>
   );

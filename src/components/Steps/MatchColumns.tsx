@@ -14,7 +14,7 @@ import { TemplateColumn } from '../TemplateColumn';
 import { setIgnoreColumn } from '../MatchColumns/setIgnoreColumn';
 import { Button, DialogActions } from '@mui/material';
 import Box from '@mui/material/Box';
-import Typography from "@mui/material/Typography";
+import Typography from '@mui/material/Typography';
 
 export type MatchColumnsProps<T extends string> = {
   data: RawData[];
@@ -170,7 +170,7 @@ export const MatchColumnsStep = <T extends string>({ data, headerValues, onConti
       <Typography variant={'h4'} gutterBottom>
         {translations.matchColumnsStep.title}
       </Typography>
-      <ColumnGrid
+      {/* <ColumnGrid
         columns={columns}
         onContinue={handleOnContinue}
         isLoading={isLoading}
@@ -183,7 +183,7 @@ export const MatchColumnsStep = <T extends string>({ data, headerValues, onConti
           />
         )}
         templateColumn={column => <TemplateColumn column={column} onChange={onChange} onSubChange={onSubChange} />}
-      />
+      /> */}
       {isLoading ? (
         <>{'Loading...'}</>
       ) : (
