@@ -1,11 +1,10 @@
-import React from 'react';
-import Box from "@mui/material/Box";
-import HorizontalStepper from "./components/Stepper";
-import {Providers} from "./Providers";
-import {translations} from "./translationsRSIProps";
-import { RsiProps} from "./types";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import HorizontalStepper from './components/Stepper';
+import { Providers } from './Providers';
+import { translations } from './translationsRSIProps';
+import { RsiProps } from './types';
 import { Dialog } from '@mui/material';
-
 
 export const defaultRSIProps: Partial<RsiProps<any>> = {
   autoMapHeaders: true,
@@ -19,19 +18,16 @@ export const defaultRSIProps: Partial<RsiProps<any>> = {
   parseRaw: true,
 };
 
-
-
 export const ReactSpreadsheetImport = <T extends string>(props: RsiProps<T>) => {
-    return (
-        <Providers rsiValues={{ ...props, translations }}>
-            <Dialog fullWidth maxWidth={'lg'} open={props.isOpen} onClose={props.onClose}>
-            <Box>
-                <HorizontalStepper />
-            </Box>
-            </Dialog>
-        </Providers>
-    );
+  return (
+    <Providers rsiValues={{ ...props, translations }}>
+      <Dialog fullWidth maxWidth={'lg'} open={props.isOpen} onClose={props.onClose}>
+        <Box>
+          <HorizontalStepper />
+        </Box>
+      </Dialog>
+    </Providers>
+  );
+};
 
-}
-
-ReactSpreadsheetImport.defaultProps = defaultRSIProps
+ReactSpreadsheetImport.defaultProps = defaultRSIProps;
