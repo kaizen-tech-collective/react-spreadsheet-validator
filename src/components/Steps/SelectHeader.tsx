@@ -1,9 +1,14 @@
-import { useCallback, useState } from 'react';
+import * as React from 'react';
+
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+import { GridRowSelectionModel } from '@mui/x-data-grid';
+
 import { useRsi } from '../../hooks/useRsi';
 import type { RawData } from '../../types';
-import { Box, Button } from '@mui/material';
-import Typography from '@mui/material/Typography';
-import * as React from 'react';
+
 import { SelectHeaderTable } from '../SelectHeaderTable';
 
 type SelectHeaderProps = {
@@ -16,16 +21,24 @@ export const SelectHeaderStep = ({ data, onContinue }: SelectHeaderProps) => {
   //     "SelectHeaderStep",
   // ) as (typeof themeOverrides)["components"]["SelectHeaderStep"]["baseStyle"]
   const { translations } = useRsi();
-  const [selectedRows, setSelectedRows] = useState<ReadonlySet<number>>(new Set([0]));
-  const [isLoading, setIsLoading] = useState(false);
+  const [selectedRows, setSelectedRows] = React.useState<GridRowSelectionModel>({
+    type: 'include',
+    ids: new Set<number>([0]), // Auto-select first row (id = 0)
+  });
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const handleContinue = useCallback(async () => {
-    const [selectedRowIndex] = selectedRows;
-    // We consider data above header to be redundant
-    const trimmedData = data.slice(selectedRowIndex + 1);
-    setIsLoading(true);
-    await onContinue(data[selectedRowIndex], trimmedData);
-    setIsLoading(false);
+  const handleContinue = React.useCallback(async () => {
+    const [rawId] = Array.from(selectedRows.ids);
+    const selectedRowId = Number(rawId);
+
+    if (!Number.isNaN(selectedRowId)) {
+      const header = data[selectedRowId];
+      const trimmedData = data.slice(selectedRowId + 1);
+
+      setIsLoading(true);
+      await onContinue(header, trimmedData);
+      setIsLoading(false);
+    }
   }, [onContinue, data, selectedRows]);
 
   return (
@@ -33,11 +46,11 @@ export const SelectHeaderStep = ({ data, onContinue }: SelectHeaderProps) => {
       <Typography variant={'h4'} gutterBottom>
         {translations.selectHeaderStep.title}
       </Typography>
-      <Box sx={{ h: 0, flexGrow: 1 }}>
-        {/* <SelectHeaderTable data={data} selectedRows={selectedRows} setSelectedRows={setSelectedRows} /> */}
+      <Box style={{ height: '50vh', display: 'flex', flexDirection: 'column' }}>
+        <SelectHeaderTable data={data} selectedRows={selectedRows} setSelectedRows={setSelectedRows} />
       </Box>
       {isLoading ? (
-        <>{'Loading...'}</>
+        <>Loading...</>
       ) : (
         <Box
           sx={{
@@ -47,7 +60,13 @@ export const SelectHeaderStep = ({ data, onContinue }: SelectHeaderProps) => {
             pt: 2,
           }}
         >
-          <Button variant={'contained'} onClick={() => handleContinue()} style={{ width: 300 }}>
+          <Button
+            variant="contained"
+            style={{ width: 300 }}
+            onClick={() => {
+              return handleContinue();
+            }}
+          >
             {translations.selectHeaderStep.nextButtonTitle}
           </Button>
         </Box>

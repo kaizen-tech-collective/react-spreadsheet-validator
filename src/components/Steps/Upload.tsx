@@ -38,7 +38,7 @@ const Upload = ({ onContinue }: UploadProps) => {
     },
     [onContinue],
   );
-  console.log('fields: ', fields);
+
   return (
     <>
       <Typography variant={'h4'} gutterBottom>
