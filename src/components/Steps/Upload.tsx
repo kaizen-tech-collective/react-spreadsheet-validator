@@ -1,9 +1,7 @@
 import * as React from 'react';
-// import { inspect } from 'util';
 import XLSX from 'xlsx-ugnis';
 
 import Box from '@mui/material/Box';
-// import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 import { useRsi } from '../../hooks/useRsi';

@@ -1,12 +1,13 @@
-import { useDropzone } from 'react-dropzone';
-import * as XLSX from 'xlsx-ugnis';
-import { useState } from 'react';
-import { useRsi } from '../hooks/useRsi';
-import { toast } from 'react-toastify';
-import {Box, DialogActions} from '@mui/material';
 import * as React from 'react';
-import Typography from '@mui/material/Typography';
+import { useDropzone } from 'react-dropzone';
+import { toast } from 'react-toastify';
+import * as XLSX from 'xlsx-ugnis';
+
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+import { useRsi } from '../hooks/useRsi';
 
 type DropZoneProps = {
   onContinue: (data: XLSX.WorkBook, file: File) => void;
@@ -30,7 +31,7 @@ export const readFileAsync = (file: File) => {
 export const DropZone = ({ onContinue, isLoading }: DropZoneProps) => {
   const { translations, maxFileSize, dateFormat, parseRaw } = useRsi();
   // const styles = useStyleConfig("UploadStep") as (typeof themeOverrides)["components"]["UploadStep"]["baseStyle"]
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = React.useState(false);
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
     noClick: true,
     noKeyboard: true,
