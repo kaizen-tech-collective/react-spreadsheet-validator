@@ -2,14 +2,11 @@ import * as React from 'react';
 import { toast } from 'react-toastify';
 import XLSX from 'xlsx-ugnis';
 
-// import Box from '@mui/material/Box';
-// import Button from '@mui/material/Button';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepButton from '@mui/material/StepButton';
-// import Typography from '@mui/material/Typography';
 
 import { useRsi } from '../hooks/useRsi';
 import { StepState, StepType } from '../types';
@@ -109,7 +106,7 @@ const HorizontalStepper = () => {
       key={3}
       data={state.type !== 'upload' ? state.data : []}
       headerValues={state.type === 'matchColumns' ? state.headerValues : []}
-      onContinue={async (values, rawData, columns) => {
+      onContinue={async values => {
         try {
           setState({
             type: StepType.validateData,
@@ -125,31 +122,31 @@ const HorizontalStepper = () => {
     <ValidationStep key={4} initialData={state.data} file={uploadedFile!} />,
   ];
 
-  const totalSteps = () => {
-    return steps.length;
-  };
+  // const totalSteps = () => {
+  //   return steps.length;
+  // };
 
-  const completedSteps = () => {
-    return Object.keys(completed).length;
-  };
+  // const completedSteps = () => {
+  //   return Object.keys(completed).length;
+  // };
 
-  const isLastStep = () => {
-    return activeStep === totalSteps() - 1;
-  };
+  // const isLastStep = () => {
+  //   return activeStep === totalSteps() - 1;
+  // };
 
-  const handleNext = () => {
-    setCompleted({ ...completed, [activeStep]: true });
-    const newActiveStep = isLastStep()
-      ? // It's the last step, but not all steps have been completed,
-        // find the first step that has been completed
-        steps.findIndex((step, i) => !(i in completed))
-      : activeStep + 1;
-    setActiveStep(newActiveStep);
-  };
+  // const handleNext = () => {
+  //   setCompleted({ ...completed, [activeStep]: true });
+  //   const newActiveStep = isLastStep()
+  //     ? // It's the last step, but not all steps have been completed,
+  //       // find the first step that has been completed
+  //       steps.findIndex((step, i) => !(i in completed))
+  //     : activeStep + 1;
+  //   setActiveStep(newActiveStep);
+  // };
 
-  const handleFinish = () => {
-    alert('Finish');
-  };
+  // const handleFinish = () => {
+  //   alert('Finish');
+  // };
 
   return (
     <>

@@ -1,10 +1,19 @@
-import { Column, useRowSelection } from 'react-data-grid';
-import type { ChangeEvent } from 'react';
-import type { Data, Fields, Meta } from '../types';
-import { CgInfo } from 'react-icons/cg';
 import * as React from 'react';
+import type { ChangeEvent } from 'react';
+
+import InfoIcon from '@mui/icons-material/Info';
+
+import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
+import Input from '@mui/material/Input';
+import Switch from '@mui/material/Switch';
+import Tooltip from '@mui/material/Tooltip';
+
+import { Column, useRowSelection } from 'react-data-grid';
+
+import type { Data, Fields, Meta } from '../types';
+
 import { MatchColumnSelect } from './MatchColumnSelect';
-import { Box, Checkbox, Input, Switch, Tooltip } from '@mui/material';
 
 const SELECT_COLUMN_KEY = 'select-row';
 //
@@ -54,7 +63,7 @@ export const generateColumns = <T extends string>(fields: Fields<T>): Column<Dat
       //     {column.description && (
       //       <Tooltip placement="top" title={column.description}>
       //         <Box flex={'0 0 auto'}>
-      //           <CgInfo size="1rem" />
+      //           <InfoIcon sx={{ fontSize: '1rem' }} />
       //         </Box>
       //       </Tooltip>
       //     )}

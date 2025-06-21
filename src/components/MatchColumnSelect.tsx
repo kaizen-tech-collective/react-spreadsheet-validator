@@ -1,10 +1,12 @@
-import { SelectOption } from '../types';
 import * as React from 'react';
-import Select from 'react-select'
+
+import TextField from '@mui/material/TextField';
+
+import { SelectOption } from '../types';
 
 interface Props {
   onChange: (value: any) => void;
-  value?: SelectOption;
+  value?: string;
   options: readonly SelectOption[];
   placeholder?: string;
   name?: string;
@@ -13,6 +15,30 @@ interface Props {
 export const MatchColumnSelect = ({ onChange, value, options, placeholder, name }: Props) => {
   // const styles = useStyleConfig("MatchColumnsStep") as Styles
   return (
-      <Select options={options} value={value} placeholder={placeholder} onChange={onChange}/>
+    <TextField
+      select
+      fullWidth
+      name={name}
+      value={value ?? ''}
+      onChange={event => {
+        return onChange(event.target.value);
+      }}
+      slotProps={{
+        select: {
+          native: true,
+        },
+      }}
+    >
+      <option value="" disabled>
+        {placeholder ?? '-- Select --'}
+      </option>
+      {options.map(option => {
+        return (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        );
+      })}
+    </TextField>
   );
 };

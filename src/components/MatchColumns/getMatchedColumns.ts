@@ -1,21 +1,27 @@
 import lavenstein from 'js-levenshtein';
-import { findMatch } from './findMatch';
+
 import type { Field, Fields } from '../../types';
+
+import type { Column, Columns, MatchColumnsProps } from '../Steps/MatchColumns';
+
+import { findMatch } from './findMatch';
 import { setColumn } from './setColumn';
-import type { Column, Columns } from '../Steps/MatchColumns';
-import type { MatchColumnsProps } from '../Steps/MatchColumns';
 
 export const getMatchedColumns = <T extends string>(
   columns: Columns<T>,
   fields: Fields<T>,
   data: MatchColumnsProps<T>['data'],
   autoMapDistance: number,
-) =>
-  columns.reduce<Column<T>[]>((arr, column) => {
+) => {
+  return columns.reduce<Column<T>[]>((arr, column) => {
     const autoMatch = findMatch(column.header, fields, autoMapDistance);
     if (autoMatch) {
-      const field = fields.find(field => field.key === autoMatch) as Field<T>;
-      const duplicateIndex = arr.findIndex(column => 'value' in column && column.value === field.key);
+      const field = fields.find(field => {
+        return field.key === autoMatch;
+      }) as Field<T>;
+      const duplicateIndex = arr.findIndex(column => {
+        return 'value' in column && column.value === field.key;
+      });
       const duplicate = arr[duplicateIndex];
       if (duplicate && 'value' in duplicate) {
         return lavenstein(duplicate.value, duplicate.header) < lavenstein(autoMatch, column.header)
@@ -38,3 +44,4 @@ export const getMatchedColumns = <T extends string>(
       return [...arr, column];
     }
   }, []);
+};

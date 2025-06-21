@@ -5,124 +5,82 @@ import Button from '@mui/material/Button';
 
 const fields = [
   {
-    // Visible in table header and when matching columns.
     label: 'Name',
-    // This is the key used for this field when we call onSubmit.
     key: 'name',
-    // Allows for better automatic column matching. Optional.
-    alternateMatches: ['first name', 'first', 'firstname'],
-    // Used when editing and validating information.
+    alternateMatches: ['first name', 'first'],
     fieldType: {
-      // There are 3 types - "input" / "checkbox" / "select".
       type: 'input',
     },
-    // Used in the first step to provide an example of what data is expected in this field. Optional.
     example: 'Stephanie',
-    // Can have multiple validations that are visible in Validation Step table.
     validations: [
       {
-        // Can be "required" / "unique" / "regex"
         rule: 'required',
         errorMessage: 'Name is required',
-        // There can be "info" / "warning" / "error" levels. Optional. Default "error".
-        level: 'error',
       },
     ],
   },
   {
-    // Visible in table header and when matching columns.
     label: 'Surname',
-    description: 'This is the surname',
-    // This is the key used for this field when we call onSubmit.
     key: 'surname',
-    // Allows for better automatic column matching. Optional.
-    alternateMatches: ['last name', 'last'],
-    // Used when editing and validating information.
+    alternateMatches: ['second name', 'last name', 'last'],
     fieldType: {
-      // There are 3 types - "input" / "checkbox" / "select".
       type: 'input',
     },
-    // Used in the first step to provide an example of what data is expected in this field. Optional.
     example: 'McDonald',
-    // Can have multiple validations that are visible in Validation Step table.
     validations: [
       {
-        // Can be "required" / "unique" / "regex"
-        rule: 'required',
-        errorMessage: 'Surname is required',
-        // There can be "info" / "warning" / "error" levels. Optional. Default "error".
-        level: 'error',
+        rule: 'unique',
+        errorMessage: 'Last name must be unique',
+        level: 'info',
       },
     ],
+    description: 'Family / Last name',
   },
   {
-    // Visible in table header and when matching columns.
     label: 'Age',
-    // This is the key used for this field when we call onSubmit.
     key: 'age',
-    // Used when editing and validating information.
+    alternateMatches: ['years'],
     fieldType: {
-      // There are 3 types - "input" / "checkbox" / "select".
       type: 'input',
     },
-    // Used in the first step to provide an example of what data is expected in this field. Optional.
     example: '23',
-    // Can have multiple validations that are visible in Validation Step table.
     validations: [
       {
-        // Can be "required" / "unique" / "regex"
-        rule: 'required',
-        errorMessage: 'Age is required',
-        // There can be "info" / "warning" / "error" levels. Optional. Default "error".
-        level: 'error',
+        rule: 'regex',
+        value: '^\\d+$',
+        errorMessage: 'Age must be a number',
+        level: 'warning',
       },
     ],
   },
   {
-    // Visible in table header and when matching columns.
     label: 'Team',
-    // This is the key used for this field when we call onSubmit.
     key: 'team',
-    // Used when editing and validating information.
+    alternateMatches: ['department'],
     fieldType: {
-      // There are 3 types - "input" / "checkbox" / "select".
-      type: 'input',
+      type: 'select',
+      options: [
+        { label: 'Team One', value: 'one' },
+        { label: 'Team Two', value: 'two' },
+      ],
     },
-    // Used in the first step to provide an example of what data is expected in this field. Optional.
-    example: 'Team One',
-    // Can have multiple validations that are visible in Validation Step table.
+    example: 'Team one',
     validations: [
       {
-        // Can be "required" / "unique" / "regex"
         rule: 'required',
         errorMessage: 'Team is required',
-        // There can be "info" / "warning" / "error" levels. Optional. Default "error".
-        level: 'error',
       },
     ],
   },
   {
-    // Visible in table header and when matching columns.
-    label: 'Is Manager',
-    // This is the key used for this field when we call onSubmit.
-    key: 'isManager',
-    // Used when editing and validating information.
+    label: 'Is manager',
+    key: 'is_manager',
+    alternateMatches: ['manages'],
     fieldType: {
-      // There are 3 types - "input" / "checkbox" / "select".
       type: 'checkbox',
+      booleanMatches: {},
     },
-    // Used in the first step to provide an example of what data is expected in this field. Optional.
     example: 'true',
-    // Can have multiple validations that are visible in Validation Step table.
-    validations: [
-      {
-        // Can be "required" / "unique" / "regex"
-        rule: 'required',
-        errorMessage: 'Is Manager is required',
-        // There can be "info" / "warning" / "error" levels. Optional. Default "error".
-        level: 'error',
-      },
-    ],
   },
 ] as const;
 
