@@ -1,14 +1,19 @@
-import { useCallback, useMemo, useState } from 'react';
-import { useRsi } from '../../hooks/useRsi';
-import { Table } from '../Table';
-// import { SubmitDataAlert } from "../../components/Alerts/SubmitDataAlert"
-import type { Data, Meta } from '../../types';
-import type { RowsChangeData } from 'react-data-grid';
 import * as React from 'react';
-import { addErrorsAndRunHooks } from '../dataMutations';
+
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import FormLabel from '@mui/material/FormLabel';
+import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
-import { Button, FormLabel, Switch } from '@mui/material';
+
+import { GridRowSelectionModel } from '@mui/x-data-grid';
+
+// import { SubmitDataAlert } from "../../components/Alerts/SubmitDataAlert"
+import { useRsi } from '../../hooks/useRsi';
+import type { Data, Meta } from '../../types';
+
+import { addErrorsAndRunHooks } from '../dataMutations';
+import { Table, RowData } from '../Table';
 import { generateColumns } from '../ValidationStepColumns';
 
 type Props<T extends string> = {
@@ -22,14 +27,17 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
   //     "ValidationStep",
   // ) as (typeof themeOverrides)["components"]["ValidationStep"]["baseStyle"]
 
-  const [data, setData] = useState<(Data<T> & Meta)[]>(
-    useMemo(() => addErrorsAndRunHooks<T>(initialData, fields, rowHook, tableHook), []),
+  const [data, setData] = React.useState<(Data<T> & Meta)[]>(
+    React.useMemo(() => addErrorsAndRunHooks<T>(initialData, fields, rowHook, tableHook), []),
   );
-  const [selectedRows, setSelectedRows] = useState<ReadonlySet<number | string>>(new Set());
-  const [filterByErrors, setFilterByErrors] = useState(false);
-  const [showSubmitAlert, setShowSubmitAlert] = useState(false);
+  const [selectedRows, setSelectedRows] = React.useState<GridRowSelectionModel>({
+    type: 'include',
+    ids: new Set<number>([]),
+  });
+  const [filterByErrors, setFilterByErrors] = React.useState(false);
+  const [showSubmitAlert, setShowSubmitAlert] = React.useState(false);
 
-  const updateData = useCallback(
+  const updateData = React.useCallback(
     (rows: typeof data) => {
       setData(addErrorsAndRunHooks<T>(rows, fields, rowHook, tableHook));
     },
@@ -37,37 +45,45 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
   );
 
   const deleteSelectedRows = () => {
-    if (selectedRows.size) {
-      const newData = data.filter(value => !selectedRows.has(value.__index));
+    if (selectedRows.ids.size > 0) {
+      const newData = data.filter(row => !selectedRows.ids.has(row.__index));
       updateData(newData);
-      setSelectedRows(new Set());
+
+      setSelectedRows({
+        type: 'include',
+        ids: new Set<number>(),
+      });
     }
   };
 
-  const updateRow = useCallback(
-    (rows: typeof data, changedData?: RowsChangeData<(typeof data)[number]>) => {
-      const changes = changedData?.indexes.reduce(
-        (acc, index) => {
-          // when data is filtered val !== actual index in data
-          const realIndex = data.findIndex(value => value.__index === rows[index].__index);
-          acc[realIndex] = rows[index];
+  const updateRow = React.useCallback(
+    (rows: RowData[], changedIndexes?: number[]) => {
+      const changes = changedIndexes?.reduce(
+        (acc, i) => {
+          const realIndex = data.findIndex(value => value.__index === rows[i].__index);
+          acc[realIndex] = rows[i];
           return acc;
         },
-        {} as Record<number, (typeof data)[number]>,
+        {} as Record<number, RowData>,
       );
+
       const newData = Object.assign([], data, changes);
       updateData(newData);
     },
     [data, updateData],
   );
 
-  const columns = useMemo(() => generateColumns(fields), [fields]);
+  const columns = React.useMemo(() => {
+    return generateColumns(fields);
+  }, [fields]);
 
-  const tableData = useMemo(() => {
+  const tableData = React.useMemo(() => {
     if (filterByErrors) {
       return data.filter(value => {
         if (value?.__errors) {
-          return Object.values(value.__errors)?.filter(err => err.level === 'error').length;
+          return Object.values(value.__errors)?.filter(err => {
+            return err.level === 'error';
+          }).length;
         }
         return false;
       });
@@ -75,7 +91,9 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
     return data;
   }, [data, filterByErrors]);
 
-  const rowKeyGetter = useCallback((row: Data<T> & Meta) => row.__index, []);
+  const rowKeyGetter = React.useCallback((row: Data<T> & Meta) => {
+    return row.__index;
+  }, []);
 
   const submitData = async () => {
     const calculatedData = data.reduce(
@@ -101,7 +119,9 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
   const onContinue = () => {
     const invalidData = data.find(value => {
       if (value?.__errors) {
-        return !!Object.values(value.__errors)?.filter(err => err.level === 'error').length;
+        return !!Object.values(value.__errors)?.filter(err => {
+          return err.level === 'error';
+        }).length;
       }
       return false;
     });
@@ -124,19 +144,20 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
           <Switch
             sx={{ display: 'flex', alignItems: 'center' }}
             checked={filterByErrors}
-            onChange={() => setFilterByErrors(!filterByErrors)}
+            onChange={() => {
+              return setFilterByErrors(!filterByErrors);
+            }}
           />
           <FormLabel component="legend">{translations.validationStep.filterSwitchTitle}</FormLabel>
         </Box>
       </Box>
-      <Box sx={{ h: 0, flexGrow: 1 }}>
-        {/* <Table
-          rowKeyGetter={rowKeyGetter}
+      <Box style={{ height: '50vh', display: 'flex', flexDirection: 'column' }}>
+        <Table
           rows={tableData}
-          onRowsChange={updateRow}
           columns={columns}
           selectedRows={selectedRows}
-          onSelectedRowsChange={setSelectedRows}
+          setSelectedRow={setSelectedRows}
+          onRowsChange={updateRow}
           components={{
             noRowsFallback: (
               <Box display="flex" justifyContent="center" gridColumn="1/-1" mt="32px">
@@ -146,7 +167,7 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
               </Box>
             ),
           }}
-        /> */}
+        />
       </Box>
       <Box
         sx={{

@@ -2385,7 +2385,6 @@ __metadata:
     lodash: "npm:4.17.21"
     prettier: "npm:^3.0.2"
     react: "npm:19.1.0"
-    react-data-grid: "npm:7.0.0-beta.56"
     react-dom: "npm:19.1.0"
     react-dropzone: "npm:14.2.3"
     react-scripts: "npm:5.0.1"
@@ -4974,7 +4973,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clsx@npm:^2.0.0, clsx@npm:^2.1.1":
+"clsx@npm:^2.1.1":
   version: 2.1.1
   resolution: "clsx@npm:2.1.1"
   checksum: 10c0/c4c8eb865f8c82baab07e71bfa8897c73454881c4f99d6bc81585aecd7c441746c1399d08363dc096c550cceaf97bd4ce1e8854e1771e9998d9f94c4fe075839
@@ -11705,18 +11704,6 @@ __metadata:
     regenerator-runtime: "npm:^0.13.9"
     whatwg-fetch: "npm:^3.6.2"
   checksum: 10c0/7079c81717f4707d078943ab507771c3e80333e6c2c80c8d9a02e4a5661974e9bb196aea9f56336f559214a23f495c5f3907937d13a070e701019ae7a9d53c26
-  languageName: node
-  linkType: hard
-
-"react-data-grid@npm:7.0.0-beta.56":
-  version: 7.0.0-beta.56
-  resolution: "react-data-grid@npm:7.0.0-beta.56"
-  dependencies:
-    clsx: "npm:^2.0.0"
-  peerDependencies:
-    react: ^19.0
-    react-dom: ^19.0
-  checksum: 10c0/5b6eace5e7bea7c84343831b44e1104c1bc3a96addfeb6dc06125033b5a63190db1e53ebb2779bd25b8b040a667b3d95aa3443c42ed0e9f8be4089fdc4e82a4f
   languageName: node
   linkType: hard
 
