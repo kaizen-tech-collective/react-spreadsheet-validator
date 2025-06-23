@@ -1,7 +1,11 @@
 import * as React from 'react';
-import { ReactSpreadsheetImport } from './ReactSpreadsheetImport';
-import { useState } from 'react';
+
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+
+import { Result } from '../src/types';
+
+import { ReactSpreadsheetImport } from './ReactSpreadsheetImport';
 
 const fields = [
   {
@@ -85,30 +89,59 @@ const fields = [
 ] as const;
 
 export const App = () => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [data, setData] = React.useState<Result<any> | null>(null);
+  const [open, setOpen] = React.useState<boolean>(false);
   return (
     <>
-      <Button
-        variant="contained"
-        onClick={() => {
-          return setOpen(true);
-        }}
-      >
-        Open Flow
-      </Button>
+      <Box display="flex" gap="1" alignItems="center">
+        <Button
+          variant="contained"
+          onClick={() => {
+            return setOpen(true);
+          }}
+        >
+          Open Flow
+        </Button>
+      </Box>
       <ReactSpreadsheetImport
+        fields={fields}
         isOpen={open}
         onClose={() => {
           return setOpen(false);
         }}
-        fields={fields}
-        onSubmit={(
-          data,
-          // file
-        ) => {
-          return console.log(data);
+        onSubmit={data => {
+          setData(data);
         }}
       />
+      {!!data && (
+        <Box pt={4} display="flex" gap="8px" flexDirection="column">
+          <b>Returned data (showing first 100 rows):</b>
+          <Box
+            component="span"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              borderRadius: '8px',
+              fontSize: '16px',
+              background: '#4A5568',
+              color: 'white',
+              p: '32',
+            }}
+          >
+            <pre>
+              {JSON.stringify(
+                {
+                  validData: data.validData.slice(0, 100),
+                  invalidData: data.invalidData.slice(0, 100),
+                  all: data.all.slice(0, 100),
+                },
+                undefined,
+                4,
+              )}
+            </pre>
+          </Box>
+        </Box>
+      )}
     </>
   );
 };

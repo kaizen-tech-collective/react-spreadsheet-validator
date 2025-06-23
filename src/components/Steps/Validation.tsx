@@ -16,10 +16,11 @@ import generateValidationStepColumns, { validationStepColumnStyling } from '../V
 
 type Props<T extends string> = {
   initialData: Data<T>[];
+  file: File;
 };
 
-export const ValidationStep = <T extends string>({ initialData }: Props<T>) => {
-  const { fields, rowHook, rtl, tableHook, translations } = useRsi<T>();
+export const ValidationStep = <T extends string>({ initialData, file }: Props<T>) => {
+  const { fields, onClose, onSubmit, rowHook, rtl, tableHook, translations } = useRsi<T>();
 
   const [data, setData] = React.useState<(Data<T> & Meta)[]>(
     React.useMemo(() => {
@@ -30,6 +31,7 @@ export const ValidationStep = <T extends string>({ initialData }: Props<T>) => {
     type: 'include',
     ids: new Set<number>([]),
   });
+
   const [filterByErrors, setFilterByErrors] = React.useState(false);
 
   const handleProcessRowUpdate = React.useCallback(
@@ -71,7 +73,7 @@ export const ValidationStep = <T extends string>({ initialData }: Props<T>) => {
     return data;
   }, [data, filterByErrors]);
 
-  const onDeleteSelectedRowsClick = () => {
+  const onDelete = () => {
     if (selectedRows.ids.size > 0) {
       const newData = data.filter(row => {
         return !selectedRows.ids.has(row.__index);
@@ -86,12 +88,52 @@ export const ValidationStep = <T extends string>({ initialData }: Props<T>) => {
     }
   };
 
+  const onContinue = () => {
+    const invalidData = data.find(value => {
+      if (value?.__errors) {
+        return !!Object.values(value.__errors)?.filter(err => {
+          return err.level === 'error';
+        }).length;
+      }
+      return false;
+    });
+
+    // TODO: Replace this with a pretty dialog
+    let submit;
+    if (invalidData) {
+      submit = confirm(
+        'There are still some rows that contain errors. Rows with errors will be ignored when submitting.',
+      );
+    }
+
+    if (submit) {
+      const calculatedData = data.reduce(
+        (acc, value) => {
+          const { __index, __errors, ...values } = value;
+          if (__errors) {
+            for (const key in __errors) {
+              if (__errors[key].level === 'error') {
+                acc.invalidData.push(values as unknown as Data<T>);
+                return acc;
+              }
+            }
+          }
+          acc.validData.push(values as unknown as Data<T>);
+          return acc;
+        },
+        { validData: [] as Data<T>[], invalidData: [] as Data<T>[], all: data },
+      );
+      onSubmit(calculatedData, file);
+      onClose();
+    }
+  };
+
   return (
     <>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb="2rem" flexWrap="wrap" gap="8px">
         <Typography variant={'h4'}>{translations.validationStep.title}</Typography>
         <Box display="flex" gap="16px" alignItems="center" flexWrap="wrap">
-          <Button onClick={onDeleteSelectedRowsClick} size={'small'} variant={'outlined'}>
+          <Button onClick={onDelete} size={'small'} variant={'outlined'}>
             {translations.validationStep.discardButtonTitle}
           </Button>
           <Switch
@@ -136,6 +178,18 @@ export const ValidationStep = <T extends string>({ initialData }: Props<T>) => {
             direction: rtl ? 'rtl' : 'ltr',
           }}
         />
+      </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          pt: 2,
+        }}
+      >
+        <Button variant={'contained'} onClick={onContinue} style={{ width: 300 }}>
+          {translations.validationStep.nextButtonTitle}
+        </Button>
       </Box>
     </>
   );
