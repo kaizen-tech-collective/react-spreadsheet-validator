@@ -28,8 +28,8 @@ export const SubMatchingSelect = <T extends string>({ option, column, onSubChang
       <MatchColumnSelect
         value={value}
         placeholder={translations.matchColumnsStep.subSelectPlaceholder}
-        onChange={value => {
-          return onSubChange(value as T, column.index, option.entry!);
+        onChange={event => {
+          return onSubChange(event.target.value as T, column.index, option.entry!);
         }}
         options={options}
         name={option.entry}

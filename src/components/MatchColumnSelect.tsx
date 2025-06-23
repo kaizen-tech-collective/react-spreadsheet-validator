@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import { SelectOption } from '../types';
 
 interface Props {
-  onChange: (value: any) => void;
+  onChange: (event: any) => void;
   value?: string;
   options: readonly SelectOption[];
   placeholder?: string;
@@ -20,9 +20,7 @@ export const MatchColumnSelect = ({ onChange, value, options, placeholder, name 
       fullWidth
       name={name}
       value={value ?? ''}
-      onChange={event => {
-        return onChange(event.target.value);
-      }}
+      onChange={onChange}
       slotProps={{
         select: {
           native: true,

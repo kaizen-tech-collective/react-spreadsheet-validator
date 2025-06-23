@@ -60,8 +60,8 @@ export const TemplateColumn = <T extends string>({ column, onChange, onSubChange
                 value={'value' in column ? column.value : ''}
                 options={selectOptions}
                 name={column.header}
-                onChange={value => {
-                  return onChange(value as T, column.index);
+                onChange={event => {
+                  return onChange(event.target.value as T, column.index);
                 }}
               />
             </Grid>

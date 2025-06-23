@@ -30,17 +30,18 @@ export const Table = ({ rows, columns, selectedRows, setSelectedRow, onRowsChang
       checkboxSelection
       disableRowSelectionOnClick
       rowSelectionModel={selectedRows}
-      onRowSelectionModelChange={newRowSelectionModel => {
-        setSelectedRow(newRowSelectionModel);
-      }}
-      onRowEditStop={(params, event) => {
-        // Add edit handling here if using cell editing
-      }}
-      processRowUpdate={(newRow, oldRow) => {
-        const updatedRows = rows.map(r => (r.__index === newRow.__index ? newRow : r));
-        onRowsChange(updatedRows, [newRow.__index]);
+      onRowSelectionModelChange={setSelectedRow}
+      processRowUpdate={newRow => {
+        const idx = rows.findIndex(r => r.__index === newRow.__index);
+        const updatedRows = [...rows];
+        updatedRows[idx] = newRow;
+        onRowsChange(updatedRows, [idx]);
         return newRow;
       }}
+      onProcessRowUpdateError={error => {
+        console.error('Edit failed:', error);
+      }}
+      editMode="cell"
       hideFooter
       sx={{
         direction: rtl ? 'rtl' : 'ltr',
