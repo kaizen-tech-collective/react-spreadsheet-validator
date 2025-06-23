@@ -1,11 +1,12 @@
 import * as React from 'react';
 
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import FormLabel from '@mui/material/FormLabel';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
-import { DataGrid, GridRowModel } from '@mui/x-data-grid';
+import { DataGrid, GridRowModel, GridRowSelectionModel } from '@mui/x-data-grid';
 
 import { useRsi } from '../../hooks/useRsi';
 import type { Data, Meta } from '../../types';
@@ -25,6 +26,10 @@ export const ValidationStep = <T extends string>({ initialData }: Props<T>) => {
       return addErrorsAndRunHooks<T>(initialData, fields, rowHook, tableHook);
     }, []),
   );
+  const [selectedRows, setSelectedRows] = React.useState<GridRowSelectionModel>({
+    type: 'include',
+    ids: new Set<number>([]),
+  });
   const [filterByErrors, setFilterByErrors] = React.useState(false);
 
   const handleProcessRowUpdate = React.useCallback(
@@ -66,14 +71,29 @@ export const ValidationStep = <T extends string>({ initialData }: Props<T>) => {
     return data;
   }, [data, filterByErrors]);
 
+  const onDeleteSelectedRowsClick = () => {
+    if (selectedRows.ids.size > 0) {
+      const newData = data.filter(row => {
+        return !selectedRows.ids.has(row.__index);
+      });
+
+      setData(newData);
+
+      setSelectedRows({
+        type: 'include',
+        ids: new Set<number>(),
+      });
+    }
+  };
+
   return (
     <>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb="2rem" flexWrap="wrap" gap="8px">
         <Typography variant={'h4'}>{translations.validationStep.title}</Typography>
         <Box display="flex" gap="16px" alignItems="center" flexWrap="wrap">
-          {/* <Button onClick={deleteSelectedRows} size={'small'} variant={'outlined'}>
+          <Button onClick={onDeleteSelectedRowsClick} size={'small'} variant={'outlined'}>
             {translations.validationStep.discardButtonTitle}
-          </Button> */}
+          </Button>
           <Switch
             sx={{ display: 'flex', alignItems: 'center' }}
             checked={filterByErrors}
@@ -100,8 +120,12 @@ export const ValidationStep = <T extends string>({ initialData }: Props<T>) => {
         <DataGrid
           rows={rows}
           columns={columns}
-          getRowId={row => row.__index}
+          getRowId={row => {
+            return row.__index;
+          }}
           checkboxSelection
+          rowSelectionModel={selectedRows}
+          onRowSelectionModelChange={setSelectedRows}
           disableRowSelectionOnClick
           disableColumnSorting
           disableColumnFilter
