@@ -1,10 +1,10 @@
-import lavenstein from "js-levenshtein"
-import {Fields} from "../../types";
+import lavenstein from 'js-levenshtein';
+import { Fields } from '../../types';
 
 type AutoMatchAccumulator<T> = {
-  distance: number
-  value: T
-}
+  distance: number;
+  value: T;
+};
 
 export const findMatch = <T extends string>(
   header: string,
@@ -15,12 +15,12 @@ export const findMatch = <T extends string>(
     const distance = Math.min(
       ...[
         lavenstein(field.key, header),
-        ...(field.alternateMatches?.map((alternate) => lavenstein(alternate, header)) || []),
+        ...(field.alternateMatches?.map(alternate => lavenstein(alternate, header)) || []),
       ],
-    )
+    );
     return distance < acc.distance || acc.distance === undefined
       ? ({ value: field.key, distance } as AutoMatchAccumulator<T>)
-      : acc
-  }, {} as AutoMatchAccumulator<T>)
-  return smallestValue.distance <= autoMapDistance ? smallestValue.value : undefined
-}
+      : acc;
+  }, {} as AutoMatchAccumulator<T>);
+  return smallestValue.distance <= autoMapDistance ? smallestValue.value : undefined;
+};
