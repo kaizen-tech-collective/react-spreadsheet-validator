@@ -99,7 +99,7 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
     });
 
     // TODO: Replace this with a pretty dialog
-    let submit;
+    let submit = true;
     if (invalidData) {
       submit = confirm(
         'There are still some rows that contain errors. Rows with errors will be ignored when submitting.',
