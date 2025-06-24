@@ -1,96 +1,147 @@
 import * as React from 'react';
-import { ReactSpreadsheetImport } from './ReactSpreadsheetImport';
-import { useState } from 'react';
+
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+
+import { Result } from '../src/types';
+
+import { ReactSpreadsheetImport } from './ReactSpreadsheetImport';
 
 const fields = [
   {
-    // Visible in table header and when matching columns.
     label: 'Name',
-    // This is the key used for this field when we call onSubmit.
     key: 'name',
-    // Allows for better automatic column matching. Optional.
-    alternateMatches: ['first name', 'first', 'firstname'],
-    // Used when editing and validating information.
+    alternateMatches: ['first name', 'first'],
     fieldType: {
-      // There are 3 types - "input" / "checkbox" / "select".
       type: 'input',
     },
-    // Used in the first step to provide an example of what data is expected in this field. Optional.
     example: 'Stephanie',
-    // Can have multiple validations that are visible in Validation Step table.
     validations: [
       {
-        // Can be "required" / "unique" / "regex"
         rule: 'required',
         errorMessage: 'Name is required',
-        // There can be "info" / "warning" / "error" levels. Optional. Default "error".
-        level: 'error',
       },
     ],
   },
   {
-    // Visible in table header and when matching columns.
     label: 'Surname',
-    description: 'This is the surname',
-    // This is the key used for this field when we call onSubmit.
     key: 'surname',
-    // Allows for better automatic column matching. Optional.
-    alternateMatches: ['last name', 'last'],
-    // Used when editing and validating information.
+    alternateMatches: ['second name', 'last name', 'last'],
     fieldType: {
-      // There are 3 types - "input" / "checkbox" / "select".
       type: 'input',
     },
-    // Used in the first step to provide an example of what data is expected in this field. Optional.
     example: 'McDonald',
-    // Can have multiple validations that are visible in Validation Step table.
     validations: [
       {
-        // Can be "required" / "unique" / "regex"
-        rule: 'required',
-        errorMessage: 'Surname is required',
-        // There can be "info" / "warning" / "error" levels. Optional. Default "error".
-        level: 'error',
+        rule: 'unique',
+        errorMessage: 'Last name must be unique',
+        level: 'info',
+      },
+    ],
+    description: 'Family / Last name',
+  },
+  {
+    label: 'Age',
+    key: 'age',
+    alternateMatches: ['years'],
+    fieldType: {
+      type: 'input',
+    },
+    example: '23',
+    validations: [
+      {
+        rule: 'regex',
+        value: '^\\d+$',
+        errorMessage: 'Age must be a number',
+        level: 'warning',
       },
     ],
   },
   {
-    // Visible in table header and when matching columns.
-    label: 'Age',
-    // This is the key used for this field when we call onSubmit.
-    key: 'age',
-    // Used when editing and validating information.
+    label: 'Team',
+    key: 'team',
+    alternateMatches: ['department'],
     fieldType: {
-      // There are 3 types - "input" / "checkbox" / "select".
-      type: 'input',
+      type: 'select',
+      options: [
+        { label: 'Team One', value: 'one' },
+        { label: 'Team Two', value: 'two' },
+      ],
     },
-    // Used in the first step to provide an example of what data is expected in this field. Optional.
-    example: '23',
-    // Can have multiple validations that are visible in Validation Step table.
+    example: 'Team one',
     validations: [
       {
-        // Can be "required" / "unique" / "regex"
         rule: 'required',
-        errorMessage: 'Age is required',
-        // There can be "info" / "warning" / "error" levels. Optional. Default "error".
-        level: 'error',
+        errorMessage: 'Team is required',
       },
     ],
+  },
+  {
+    label: 'Is manager',
+    key: 'is_manager',
+    alternateMatches: ['manages'],
+    fieldType: {
+      type: 'checkbox',
+      booleanMatches: {},
+    },
+    example: 'true',
   },
 ] as const;
 
 export const App = () => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [data, setData] = React.useState<Result<any> | null>(null);
+  const [open, setOpen] = React.useState<boolean>(false);
   return (
     <>
-      <Button variant={'contained'} onClick={() => setOpen(true)}>Open Flow</Button>
+      <Box display="flex" gap="1" alignItems="center">
+        <Button
+          variant="contained"
+          onClick={() => {
+            return setOpen(true);
+          }}
+        >
+          Open Flow
+        </Button>
+      </Box>
       <ReactSpreadsheetImport
-        isOpen={open}
-        onClose={() => setOpen(false)}
         fields={fields}
-        onSubmit={(data, file) => console.log(data)}
+        isOpen={open}
+        onClose={() => {
+          return setOpen(false);
+        }}
+        onSubmit={data => {
+          setData(data);
+        }}
       />
+      {!!data && (
+        <Box pt={4} display="flex" gap="8px" flexDirection="column">
+          <b>Returned data (showing first 100 rows):</b>
+          <Box
+            component="span"
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              borderRadius: '8px',
+              fontSize: '16px',
+              background: '#4A5568',
+              color: 'white',
+              p: '32',
+            }}
+          >
+            <pre>
+              {JSON.stringify(
+                {
+                  validData: data.validData.slice(0, 100),
+                  invalidData: data.invalidData.slice(0, 100),
+                  all: data.all.slice(0, 100),
+                },
+                undefined,
+                4,
+              )}
+            </pre>
+          </Box>
+        </Box>
+      )}
     </>
   );
 };

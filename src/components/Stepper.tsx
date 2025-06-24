@@ -1,25 +1,28 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+import { toast } from 'react-toastify';
+import XLSX from 'xlsx-ugnis';
+
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepButton from '@mui/material/StepButton';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Upload from './Steps/Upload';
+
 import { useRsi } from '../hooks/useRsi';
-import { useCallback, useState } from 'react';
 import { StepState, StepType } from '../types';
-import { toast } from 'react-toastify';
-import XLSX from 'xlsx-ugnis';
-import { SelectHeaderStep } from './Steps/SelectHeader';
+
 import { MatchColumnsStep } from './Steps/MatchColumns';
+import { SelectHeaderStep } from './Steps/SelectHeader';
+import Upload from './Steps/Upload';
 import { ValidationStep } from './Steps/Validation';
-import {DialogContent, DialogTitle} from "@mui/material";
 
 const steps = ['Upload file', 'Select header row', 'Match columns', 'Validate data'];
 
 export const exceedsMaxRecords = (workSheet: XLSX.WorkSheet, maxRecords: number) => {
-  const [top, bottom] = workSheet['!ref']?.split(':').map(position => parseInt(position.replace(/\D/g, ''), 10)) || [];
+  const [top, bottom] =
+    workSheet['!ref']?.split(':').map(position => {
+      return parseInt(position.replace(/\D/g, ''), 10);
+    }) || [];
   return bottom - top > maxRecords;
 };
 
@@ -33,17 +36,13 @@ export const mapWorkbook = (workbook: XLSX.WorkBook, sheetName?: string) => {
   return data as string[][];
 };
 
-interface Props {
-  nextStep: () => void;
-}
-
 const HorizontalStepper = () => {
   const { initialStepState } = useRsi();
-  const [state, setState] = useState<StepState>(initialStepState || { type: StepType.upload });
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const { maxRecords, translations, uploadStepHook, selectHeaderStepHook, matchColumnsStepHook } = useRsi();
-  // const toast = useToast()
-  const errorToast = useCallback(
+  const [state, setState] = React.useState<StepState>(initialStepState || { type: StepType.upload });
+  const [uploadedFile, setUploadedFile] = React.useState<File | null>(null);
+  const { maxRecords, translations } = useRsi();
+
+  const errorToast = React.useCallback(
     (description: string) => {
       toast(`${translations.alerts.toast.error}: ${description}`, {
         type: 'error',
@@ -107,7 +106,7 @@ const HorizontalStepper = () => {
       key={3}
       data={state.type !== 'upload' ? state.data : []}
       headerValues={state.type === 'matchColumns' ? state.headerValues : []}
-      onContinue={async (values, rawData, columns) => {
+      onContinue={async values => {
         try {
           setState({
             type: StepType.validateData,
@@ -119,48 +118,48 @@ const HorizontalStepper = () => {
         }
       }}
     />,
-      //@ts-ignore
-    <ValidationStep key={4} initialData={state.data} file={uploadedFile!} />
+    //@ts-ignore
+    <ValidationStep key={4} initialData={state.data} file={uploadedFile!} />,
   ];
 
-  const totalSteps = () => {
-    return steps.length;
-  };
+  // const totalSteps = () => {
+  //   return steps.length;
+  // };
 
-  const completedSteps = () => {
-    return Object.keys(completed).length;
-  };
+  // const completedSteps = () => {
+  //   return Object.keys(completed).length;
+  // };
 
-  const isLastStep = () => {
-    return activeStep === totalSteps() - 1;
-  };
+  // const isLastStep = () => {
+  //   return activeStep === totalSteps() - 1;
+  // };
 
-  const handleNext = () => {
-    setCompleted({ ...completed, [activeStep]: true });
-    const newActiveStep = isLastStep()
-      ? // It's the last step, but not all steps have been completed,
-        // find the first step that has been completed
-        steps.findIndex((step, i) => !(i in completed))
-      : activeStep + 1;
-    setActiveStep(newActiveStep);
-  };
+  // const handleNext = () => {
+  //   setCompleted({ ...completed, [activeStep]: true });
+  //   const newActiveStep = isLastStep()
+  //     ? // It's the last step, but not all steps have been completed,
+  //       // find the first step that has been completed
+  //       steps.findIndex((step, i) => !(i in completed))
+  //     : activeStep + 1;
+  //   setActiveStep(newActiveStep);
+  // };
 
-  const handleFinish = () => {
-    alert('Finish');
-  };
+  // const handleFinish = () => {
+  //   alert('Finish');
+  // };
 
   return (
     <>
       <DialogTitle>
-      <Stepper nonLinear activeStep={activeStep}>
-        {steps.map((label, index) => (
-          <Step key={label} completed={completed[index]}>
-            <StepButton color="inherit" disableRipple={true} style={{ cursor: 'default' }}>
-              {label}
-            </StepButton>
-          </Step>
-        ))}
-      </Stepper>
+        <Stepper nonLinear activeStep={activeStep}>
+          {steps.map((label, index) => (
+            <Step key={label} completed={completed[index]}>
+              <StepButton color="inherit" disableRipple={true} style={{ cursor: 'default' }}>
+                {label}
+              </StepButton>
+            </Step>
+          ))}
+        </Stepper>
       </DialogTitle>
       <DialogContent>{stepsContent[activeStep]}</DialogContent>
     </>

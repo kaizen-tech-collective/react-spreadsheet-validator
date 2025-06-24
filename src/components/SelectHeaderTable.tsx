@@ -1,38 +1,57 @@
-import { useMemo } from "react"
-import { generateSelectionColumns } from "./columns"
-import { Table } from './Table';
-import {RawData} from "../types";
-import * as React from "react";
+import * as React from 'react';
+
+import { DataGrid, GridRowSelectionModel, gridClasses } from '@mui/x-data-grid';
+
+import { RawData } from '../types';
+
+import { generateSelectionColumns } from './columns';
+import { generateSelectionRows } from './rows';
 
 interface Props {
-  data: RawData[]
-  selectedRows: ReadonlySet<number>
-  setSelectedRows: (rows: ReadonlySet<number>) => void
+  data: RawData[];
+  selectedRows: GridRowSelectionModel;
+  setSelectedRows: (rows: GridRowSelectionModel) => void;
 }
 
 export const SelectHeaderTable = ({ data, selectedRows, setSelectedRows }: Props) => {
-  const columns = useMemo(() => generateSelectionColumns(data), [data])
+  const rows = React.useMemo(() => {
+    return generateSelectionRows(data);
+  }, [data]);
+
+  const selectedId = React.useMemo(() => {
+    const values = [...selectedRows.ids];
+    if (values.length <= 0) {
+      return null;
+    }
+    return Number(values[0]);
+  }, [selectedRows]);
+
+  const handleRowSelect = (id: number) => {
+    setSelectedRows({ type: 'include', ids: new Set([id]) });
+  };
+
+  const columns = React.useMemo(() => {
+    return generateSelectionColumns(data, selectedId, handleRowSelect);
+  }, [data, selectedId]);
 
   return (
-    <Table
-      rowKeyGetter={(row) => data.indexOf(row)}
-      rows={data}
+    <DataGrid
+      rows={rows}
       columns={columns}
-      selectedRows={selectedRows}
-      onSelectedRowsChange={(newRows) => {
-        // allow selecting only one row
-        newRows.forEach((value) => {
-          if (!selectedRows.has(value as number)) {
-            setSelectedRows(new Set([value as number]))
-            return
-          }
-        })
+      hideFooter
+      disableColumnSorting
+      disableColumnFilter
+      disableColumnMenu
+      rowSelectionModel={selectedRows}
+      onRowClick={params => {
+        handleRowSelect(params.id as number);
       }}
-      onRowClick={(row) => {
-        setSelectedRows(new Set([data.indexOf(row)]))
+      sx={{
+        // Hide header row of the data grid
+        [`.${gridClasses['container--top']}`]: {
+          display: 'none',
+        },
       }}
-      headerRowHeight={0}
-      className="rdg-static"
     />
-  )
-}
+  );
+};

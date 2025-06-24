@@ -1,10 +1,14 @@
-import type { MatchedOptions, MatchedSelectColumn, MatchedSelectOptionsColumn } from './Steps/MatchColumns';
-import { useRsi } from '../hooks/useRsi';
-import { getFieldOptions } from './MatchColumns/getFieldOptions';
-import Typography from '@mui/material/Typography';
-import { MatchColumnSelect } from './MatchColumnSelect';
-import { Box } from '@mui/material';
 import * as React from 'react';
+
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
+import { useRsi } from '../hooks/useRsi';
+
+import type { MatchedOptions, MatchedSelectColumn, MatchedSelectOptionsColumn } from './Steps/MatchColumns';
+
+import { getFieldOptions } from './MatchColumns/getFieldOptions';
+import { MatchColumnSelect } from './MatchColumnSelect';
 
 interface Props<T> {
   option: MatchedOptions<T> | Partial<MatchedOptions<T>>;
@@ -16,15 +20,17 @@ export const SubMatchingSelect = <T extends string>({ option, column, onSubChang
   // const styles = useStyleConfig("MatchColumnsStep") as Styles
   const { translations, fields } = useRsi<T>();
   const options = getFieldOptions(fields, column.value);
-  const value = options.find(opt => opt.value == option.value);
-console.log(value);
+  const value = option.value ?? '';
+
   return (
-    <Box pl={2} pb="0.375rem">
+    <Box px={2} pb={1}>
       <Typography>{option.entry}</Typography>
       <MatchColumnSelect
         value={value}
         placeholder={translations.matchColumnsStep.subSelectPlaceholder}
-        onChange={value => onSubChange(value?.value as T, column.index, option.entry!)}
+        onChange={event => {
+          return onSubChange(event.target.value as T, column.index, option.entry!);
+        }}
         options={options}
         name={option.entry}
       />

@@ -1,18 +1,28 @@
+import * as React from 'react';
+
+import Box from '@mui/material/Box';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CircleOutlinedIcon from '@mui/icons-material/CircleOutlined';
+
+import { useRsi } from '../hooks/useRsi';
+import type { Translations } from '../translationsRSIProps';
+import type { Fields } from '../types';
+
+import { MatchColumnSelect } from './MatchColumnSelect';
 import type { Column } from './Steps/MatchColumns';
 import { ColumnType } from './Steps/MatchColumns';
-import type { Fields } from '../types';
-import type { Translations } from '../translationsRSIProps';
 import { SubMatchingSelect } from './SubMatchingSelect';
-import { useRsi } from '../hooks/useRsi';
-import Typography from '@mui/material/Typography';
-import * as React from 'react';
-import { Accordion, AccordionSummary, Box, Grid } from '@mui/material';
-import Button from '@mui/material/Button';
-import { MatchColumnSelect } from './MatchColumnSelect';
-import {FaCheckCircle, FaCircle, FaCircleNotch, FaRegCircle} from 'react-icons/fa';
 
 const getAccordionTitle = <T extends string>(fields: Fields<T>, column: Column<T>, translations: Translations) => {
-  const fieldLabel = fields.find(field => 'value' in column && field.key === column.value)!.label;
+  const fieldLabel = fields.find(field => {
+    return 'value' in column && field.key === column.value;
+  })!.label;
   return `${translations.matchColumnsStep.matchDropdownTitle} ${fieldLabel} (${
     'matchedOptions' in column && column.matchedOptions.length
   } ${translations.matchColumnsStep.unmatched})`;
@@ -33,8 +43,9 @@ export const TemplateColumn = <T extends string>({ column, onChange, onSubChange
     column.type === ColumnType.matchedCheckbox ||
     column.type === ColumnType.matchedSelectOptions;
   const isSelect = 'matchedOptions' in column;
-  const selectOptions = fields.map(({ label, key }) => ({ value: key, label }));
-  const selectValue = selectOptions.find(({ value }) => 'value' in column && column.value === value);
+  const selectOptions = fields.map(({ label, key }) => {
+    return { value: key, label };
+  });
 
   return (
     <Box sx={{ minHeight: 10, width: '100%', flexDirection: 'column', justifyContent: 'center' }}>
@@ -43,38 +54,38 @@ export const TemplateColumn = <T extends string>({ column, onChange, onSubChange
       ) : (
         <>
           <Grid container>
-            <Grid item xs={10}>
+            <Grid size={10}>
               <MatchColumnSelect
                 placeholder={translations.matchColumnsStep.selectPlaceholder}
-                value={selectValue}
-                onChange={value => onChange(value?.value as T, column.index)}
+                value={'value' in column ? column.value : ''}
                 options={selectOptions}
                 name={column.header}
+                onChange={event => {
+                  return onChange(event.target.value as T, column.index);
+                }}
               />
             </Grid>
-            <Grid item xs={2} display={'flex'} style={{ alignItems: 'center', justifyContent: 'center' }}>
-              {isChecked ? <FaCheckCircle color={'green'} size="1.5rem" /> : <FaRegCircle size="1.5rem" color={'orange'}/>}
+            <Grid size={2} display={'flex'} style={{ alignItems: 'center', justifyContent: 'center' }}>
+              {isChecked ? (
+                <CheckCircleIcon color="success" sx={{ fontSize: '1.5rem' }} />
+              ) : (
+                <CircleOutlinedIcon color="warning" sx={{ fontSize: '1.5rem' }} />
+              )}
             </Grid>
           </Grid>
           {isSelect && (
             <Box width="100%">
               <Accordion>
-                <AccordionSummary
-                  expandIcon={
-                    <Button sx={{ ':hover': { bg: 'transparent' }, ':focus': { shadow: 'none' }, px: 0, py: 4 }} />
-                  }
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
+                <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
                   <Box textAlign="left">
                     <Typography>{getAccordionTitle<T>(fields, column, translations)}</Typography>
                   </Box>
                 </AccordionSummary>
-                <Box sx={{ pb: 4, pr: 3, display: 'flex', flexDir: 'column' }}>
+                <Stack>
                   {column.matchedOptions.map(option => (
                     <SubMatchingSelect option={option} column={column} onSubChange={onSubChange} key={option.entry} />
                   ))}
-                </Box>
+                </Stack>
               </Accordion>
             </Box>
           )}

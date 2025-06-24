@@ -1,20 +1,23 @@
-import { Field, RawData } from '../../types';
-import { useRsi } from '../../hooks/useRsi';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import * as React from 'react';
-import { setColumn } from '../MatchColumns/setColumn';
 import { toast } from 'react-toastify';
-import { setSubColumn } from '../MatchColumns/setSubColumn';
-import { findUnmatchedRequiredFields } from '../MatchColumns/findUnmatchedRequiredFields';
-import { normalizeTableData } from '../MatchColumns/normalizeTableData';
-import { getMatchedColumns } from '../MatchColumns/getMatchedColumns';
-import { ColumnGrid } from '../ColumnGrid';
-import { UserTableColumn } from '../UserTableColumn';
-import { TemplateColumn } from '../TemplateColumn';
-import { setIgnoreColumn } from '../MatchColumns/setIgnoreColumn';
-import { Button, DialogActions } from '@mui/material';
+
 import Box from '@mui/material/Box';
-import Typography from "@mui/material/Typography";
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import Typography from '@mui/material/Typography';
+
+import { useRsi } from '../../hooks/useRsi';
+import { Field, RawData } from '../../types';
+
+import { ColumnGrid } from '../ColumnGrid';
+import { findUnmatchedRequiredFields } from '../MatchColumns/findUnmatchedRequiredFields';
+import { getMatchedColumns } from '../MatchColumns/getMatchedColumns';
+import { normalizeTableData } from '../MatchColumns/normalizeTableData';
+import { setColumn } from '../MatchColumns/setColumn';
+import { setIgnoreColumn } from '../MatchColumns/setIgnoreColumn';
+import { setSubColumn } from '../MatchColumns/setSubColumn';
+import { TemplateColumn } from '../TemplateColumn';
+import { UserTableColumn } from '../UserTableColumn';
 
 export type MatchColumnsProps<T extends string> = {
   data: RawData[];
@@ -67,20 +70,27 @@ export type Columns<T extends string> = Column<T>[];
 
 export const MatchColumnsStep = <T extends string>({ data, headerValues, onContinue }: MatchColumnsProps<T>) => {
   const dataExample = data.slice(0, 2);
-  const { fields, autoMapHeaders, autoMapDistance, translations } = useRsi<T>();
-  const [isLoading, setIsLoading] = useState(false);
-  const [columns, setColumns] = useState<Columns<T>>(
+  const {
+    fields,
+    // autoMapHeaders,
+    // autoMapDistance,
+    translations,
+  } = useRsi<T>();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [columns, setColumns] = React.useState<Columns<T>>(
     // Do not remove spread, it indexes empty array elements, otherwise map() skips over them
-    ([...headerValues] as string[]).map((value, index) => ({ type: ColumnType.empty, index, header: value ?? '' })),
+    ([...headerValues] as string[]).map((value, index) => {
+      return { type: ColumnType.empty, index, header: value ?? '' };
+    }),
   );
-  useEffect(() => {
+  React.useEffect(() => {
     const matchedColumns = getMatchedColumns(columns, fields, data, 1);
     setColumns(matchedColumns);
   }, []);
 
-  const [showUnmatchedFieldsAlert, setShowUnmatchedFieldsAlert] = useState(false);
+  // const [showUnmatchedFieldsAlert, setShowUnmatchedFieldsAlert] = React.useState(false);
 
-  const onChange = useCallback(
+  const onChange = React.useCallback(
     (value: T, columnIndex: number) => {
       const field = fields.find(field => field.key === value) as unknown as Field<T>;
       const existingFieldIndex = columns.findIndex(column => 'value' in column && column.value === field.key);
@@ -114,35 +124,45 @@ export const MatchColumnsStep = <T extends string>({ data, headerValues, onConti
     ],
   );
 
-  const onIgnore = useCallback(
+  const onIgnore = React.useCallback(
     (columnIndex: number) => {
-      setColumns(columns.map((column, index) => (columnIndex === index ? setIgnoreColumn<T>(column) : column)));
-    },
-    [columns, setColumns],
-  );
-
-  const onRevertIgnore = useCallback(
-    (columnIndex: number) => {
-      setColumns(columns.map((column, index) => (columnIndex === index ? setColumn(column) : column)));
-    },
-    [columns, setColumns],
-  );
-
-  const onSubChange = useCallback(
-    (value: string, columnIndex: number, entry: string) => {
       setColumns(
-        columns.map((column, index) =>
-          columnIndex === index && 'matchedOptions' in column ? setSubColumn(column, entry, value) : column,
-        ),
+        columns.map((column, index) => {
+          return columnIndex === index ? setIgnoreColumn<T>(column) : column;
+        }),
       );
     },
     [columns, setColumns],
   );
-  const unmatchedRequiredFields = useMemo(() => findUnmatchedRequiredFields(fields, columns), [fields, columns]);
 
-  const handleOnContinue = useCallback(async () => {
+  const onRevertIgnore = React.useCallback(
+    (columnIndex: number) => {
+      setColumns(
+        columns.map((column, index) => {
+          return columnIndex === index ? setColumn(column) : column;
+        }),
+      );
+    },
+    [columns, setColumns],
+  );
+
+  const onSubChange = React.useCallback(
+    (value: string, columnIndex: number, entry: string) => {
+      setColumns(
+        columns.map((column, index) => {
+          return columnIndex === index && 'matchedOptions' in column ? setSubColumn(column, entry, value) : column;
+        }),
+      );
+    },
+    [columns, setColumns],
+  );
+  const unmatchedRequiredFields = React.useMemo(() => {
+    return findUnmatchedRequiredFields(fields, columns);
+  }, [fields, columns]);
+
+  const handleOnContinue = React.useCallback(async () => {
     if (unmatchedRequiredFields.length > 0) {
-      setShowUnmatchedFieldsAlert(true);
+      // setShowUnmatchedFieldsAlert(true);
       alert(translations.alerts.unmatchedRequiredFields.headerTitle);
     } else {
       setIsLoading(true);
@@ -152,12 +172,12 @@ export const MatchColumnsStep = <T extends string>({ data, headerValues, onConti
     }
   }, [unmatchedRequiredFields.length, onContinue, columns, data, fields]);
 
-  const handleAlertOnContinue = useCallback(async () => {
-    setShowUnmatchedFieldsAlert(false);
-    setIsLoading(true);
-    onContinue(normalizeTableData(columns, data, fields), data, columns);
-    setIsLoading(false);
-  }, [onContinue, columns, data, fields]);
+  // const handleAlertOnContinue = React.useCallback(async () => {
+  //   setShowUnmatchedFieldsAlert(false);
+  //   setIsLoading(true);
+  //   onContinue(normalizeTableData(columns, data, fields), data, columns);
+  //   setIsLoading(false);
+  // }, [onContinue, columns, data, fields]);
 
   return (
     <>
@@ -179,10 +199,14 @@ export const MatchColumnsStep = <T extends string>({ data, headerValues, onConti
             column={column}
             onIgnore={onIgnore}
             onRevertIgnore={onRevertIgnore}
-            entries={dataExample.map(row => row[column.index])}
+            entries={dataExample.map(row => {
+              return row[column.index];
+            })}
           />
         )}
-        templateColumn={column => <TemplateColumn column={column} onChange={onChange} onSubChange={onSubChange} />}
+        templateColumn={column => {
+          return <TemplateColumn column={column} onChange={onChange} onSubChange={onSubChange} />;
+        }}
       />
       {isLoading ? (
         <>{'Loading...'}</>

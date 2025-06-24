@@ -1,10 +1,12 @@
-import type { Column, Columns } from './Steps/MatchColumns';
-import { FadingWrapper } from './FadingWrapper';
-import { Button, DialogActions, DialogContent } from '@mui/material';
-import { useRsi } from '../hooks/useRsi';
-import Typography from '@mui/material/Typography';
+import * as React from 'react';
+
 import Box from '@mui/material/Box';
-import React from 'react';
+import Typography from '@mui/material/Typography';
+
+import { useRsi } from '../hooks/useRsi';
+
+import { FadingWrapper } from './FadingWrapper';
+import type { Column, Columns } from './Steps/MatchColumns';
 
 type ColumnGridProps<T extends string> = {
   columns: Columns<T>;
@@ -51,20 +53,22 @@ export const ColumnGrid = <T extends string>({
             </Typography>
           </Box>
           <FadingWrapper gridColumn={`1/${columns.length + 3}`} gridRow="4/5" />
-          {columns.map((column, index) => (
-            <Box
-              key={column.header + index}
-              sx={{
-                gridRow: '4/5',
-                gridColumn: `${index + 2}/${index + 3}`,
-                py: '1.125rem',
-                pl: 2,
-                pr: 3,
-              }}
-            >
-              {templateColumn(column)}
-            </Box>
-          ))}
+          {columns.map((column, index) => {
+            return (
+              <Box
+                key={column.header + index}
+                sx={{
+                  gridRow: '4/5',
+                  gridColumn: `${index + 2}/${index + 3}`,
+                  py: '1.125rem',
+                  pl: 2,
+                  pr: 3,
+                }}
+              >
+                {templateColumn(column)}
+              </Box>
+            );
+          })}
         </>
       </Box>
     </>

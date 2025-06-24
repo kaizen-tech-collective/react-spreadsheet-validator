@@ -1,10 +1,16 @@
-import { CgClose, CgUndo } from 'react-icons/cg';
+import * as React from 'react';
+
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+
+import CloseIcon from '@mui/icons-material/Close';
+import UndoIcon from '@mui/icons-material/Undo';
+
+import { RawData } from '../types';
+
 import type { Column } from './Steps/MatchColumns';
 import { ColumnType } from './Steps/MatchColumns';
-import { RawData } from '../types';
-import Typography from '@mui/material/Typography';
-import * as React from 'react';
-import { Box, IconButton } from '@mui/material';
 
 type UserTableColumnProps<T extends string> = {
   column: Column<T>;
@@ -27,11 +33,11 @@ export const UserTableColumn = <T extends string>(props: UserTableColumnProps<T>
         <Typography color={isIgnored ? '#a0aec0' : 'black'}>{header}</Typography>
         {type === ColumnType.ignored ? (
           <IconButton aria-labelledby="Ignore column" onClick={() => onRevertIgnore(index)}>
-            <CgUndo />
+            <UndoIcon />
           </IconButton>
         ) : (
           <IconButton aria-labelledby="Ignore column" onClick={() => onIgnore(index)}>
-            <CgClose />
+            <CloseIcon />
           </IconButton>
         )}
       </Box>
