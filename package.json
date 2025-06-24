@@ -1,10 +1,23 @@
 {
-  "name": "@kaizentechcollective/react-spreadsheet-import",
+  "name": "@kaizen-tech-collective/react-spreadsheet-validator",
   "version": "0.0.1",
   "author": "Kaizen Tech Collective",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist-commonjs",
+    "dist",
+    "types"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kaizen-tech-collective/react-spreadsheet-validator.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "license": "MIT",
   "scripts": {
     "start": "react-scripts start",
     "build": "tsc",
