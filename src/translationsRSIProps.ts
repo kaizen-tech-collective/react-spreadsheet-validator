@@ -15,12 +15,12 @@ export const translations = {
     },
     selectSheet: {
       title: 'Select the sheet to use',
-      nextButtonTitle: 'Next',
+      nextButtonTitle: 'Next Step',
     },
   },
   selectHeaderStep: {
     title: 'Select header row',
-    nextButtonTitle: 'Next',
+    nextButtonTitle: 'Next Step',
   },
   matchColumnsStep: {
     title: 'Match Columns',

@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 
 import { GridRowSelectionModel } from '@mui/x-data-grid';
@@ -42,35 +43,43 @@ export const SelectHeaderStep = ({ data, onContinue }: SelectHeaderProps) => {
   }, [onContinue, data, selectedRows]);
 
   return (
-    <>
-      <Typography variant={'h4'} gutterBottom>
-        {translations.selectHeaderStep.title}
-      </Typography>
-      <Box style={{ height: '50vh', display: 'flex', flexDirection: 'column' }}>
-        <SelectHeaderTable data={data} selectedRows={selectedRows} setSelectedRows={setSelectedRows} />
-      </Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {isLoading ? (
-        <>Loading...</>
-      ) : (
+        // TODO: Abstract this to a re-usable component between steps
         <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            pt: 2,
-          }}
+          sx={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column' }}
         >
-          <Button
-            variant="contained"
-            style={{ width: 300 }}
-            onClick={() => {
-              return handleContinue();
+          <CircularProgress size="80px" />
+          <Typography variant="h6" color="text.secondary">
+            <strong>Processing...</strong>
+          </Typography>
+        </Box>
+      ) : (
+        <>
+          <Typography variant="h5" sx={{ mb: '32px' }}>
+            {translations.selectHeaderStep.title}
+          </Typography>
+          <SelectHeaderTable data={data} selectedRows={selectedRows} setSelectedRows={setSelectedRows} />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              pt: 2,
             }}
           >
-            {translations.selectHeaderStep.nextButtonTitle}
-          </Button>
-        </Box>
+            <Button
+              variant="contained"
+              style={{ width: 300 }}
+              onClick={() => {
+                return handleContinue();
+              }}
+            >
+              {translations.selectHeaderStep.nextButtonTitle}
+            </Button>
+          </Box>
+        </>
       )}
-    </>
+    </Box>
   );
 };

@@ -46,6 +46,7 @@ const Upload = ({ onContinue }: UploadProps) => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {isLoading ? (
+        // TODO: Abstract this to a re-usable component between steps
         <Box
           sx={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column' }}
         >
