@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
 import FormLabel from '@mui/material/FormLabel';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
@@ -129,11 +130,11 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
   };
 
   return (
-    <>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb="2rem" flexWrap="wrap" gap="8px">
-        <Typography variant={'h4'}>{translations.validationStep.title}</Typography>
-        <Box display="flex" gap="16px" alignItems="center" flexWrap="wrap">
-          <Button onClick={onDelete} size={'small'} variant={'outlined'}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: '32px' }}>
+        <Typography variant="h5">{translations.validationStep.title}</Typography>
+        <Box display="flex" gap="16px" alignItems="center">
+          <Button onClick={onDelete} size="small" variant="outlined" disabled={selectedRows.ids.size === 0}>
             {translations.validationStep.discardButtonTitle}
           </Button>
           <Switch
@@ -146,40 +147,32 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
           <FormLabel component="legend">{translations.validationStep.filterSwitchTitle}</FormLabel>
         </Box>
       </Box>
-      <Box
-        sx={{
-          height: '50vh',
-          display: 'flex',
-          flexDirection: 'column',
-          ...validationStepColumnStyling,
-        }}
-      >
-        {/*
+      {/*
           TODO:
           - Abstract to a component
           - Enable 'single click editing: https://mui.com/x/react-data-grid/recipes-editing/#single-click-editing
         */}
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          getRowId={row => {
-            return row.__index;
-          }}
-          checkboxSelection
-          rowSelectionModel={selectedRows}
-          onRowSelectionModelChange={setSelectedRows}
-          disableRowSelectionOnClick
-          disableColumnSorting
-          disableColumnFilter
-          disableColumnMenu
-          processRowUpdate={handleProcessRowUpdate}
-          hideFooter
-          sx={{
-            direction: rtl ? 'rtl' : 'ltr',
-          }}
-        />
-      </Box>
-      <Box
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        getRowId={row => {
+          return row.__index;
+        }}
+        checkboxSelection
+        rowSelectionModel={selectedRows}
+        onRowSelectionModelChange={setSelectedRows}
+        disableRowSelectionOnClick
+        disableColumnSorting
+        disableColumnFilter
+        disableColumnMenu
+        processRowUpdate={handleProcessRowUpdate}
+        hideFooter
+        sx={{
+          ...validationStepColumnStyling,
+          direction: rtl ? 'rtl' : 'ltr',
+        }}
+      />
+      <DialogActions
         sx={{
           display: 'flex',
           flexDirection: 'column',
@@ -187,10 +180,16 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
           pt: 2,
         }}
       >
-        <Button variant={'contained'} onClick={onContinue} style={{ width: 300 }}>
+        <Button
+          variant="contained"
+          style={{ width: 300 }}
+          onClick={() => {
+            return onContinue();
+          }}
+        >
           {translations.validationStep.nextButtonTitle}
         </Button>
-      </Box>
-    </>
+      </DialogActions>
+    </Box>
   );
 };
