@@ -161,7 +161,7 @@ const HorizontalStepper = () => {
           ))}
         </Stepper>
       </DialogTitle>
-      <DialogContent>{stepsContent[activeStep]}</DialogContent>
+      <DialogContent sx={{ p: 0, m: '32px' }}>{stepsContent[activeStep]}</DialogContent>
     </>
   );
 };

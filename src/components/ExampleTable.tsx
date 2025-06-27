@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, gridClasses } from '@mui/x-data-grid';
 
 import { Field, Fields } from '../types';
 
@@ -41,6 +41,22 @@ export const ExampleTable = <T extends string>({ fields }: Props<T>) => {
   }, [fields]);
 
   return (
-    <DataGrid rows={rows} columns={columns} hideFooter disableColumnSorting disableColumnFilter disableColumnMenu />
+    <DataGrid
+      rows={rows}
+      columns={columns}
+      hideFooter
+      disableColumnSorting
+      disableColumnFilter
+      disableColumnMenu
+      disableRowSelectionOnClick
+      sx={{
+        [`.${gridClasses.virtualScroller}`]: {
+          overflow: 'hidden',
+        },
+        [`.${gridClasses.row}:hover`]: {
+          backgroundColor: 'inherit',
+        },
+      }}
+    />
   );
 };

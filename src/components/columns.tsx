@@ -15,7 +15,7 @@ export const generateColumns = <T extends string>(fields: Fields<T>) => {
     return {
       field: column.key,
       headerName: column.label,
-      minWidth: 150,
+      minWidth: 300,
       valueFormatter: (_, row) => {
         <Box sx={{ minWidth: '100%', minHeight: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>
           {row[column.key]}
@@ -64,7 +64,7 @@ export const generateSelectionColumns = (
     return {
       field: index.toString(),
       name: '',
-      minWidth: 150,
+      minWidth: 300,
     };
   });
 

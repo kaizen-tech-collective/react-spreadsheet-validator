@@ -69,25 +69,19 @@ export const DropZone = ({ onContinue, isLoading }: DropZoneProps) => {
     },
   });
 
-  const color = '#5d55fa';
-
   return (
     <Box
       {...getRootProps()}
       sx={{
-        backgroundImage: `repeating-linear-gradient(0deg, blue, ${color} 10px, white 10px, white 20px, ${color} 20px), repeating-linear-gradient(90deg, ${color}, ${color} 10px, white 10px, white 20px, ${color} 20px), repeating-linear-gradient(180deg, ${color}, ${color} 10px, white 10px, white 20px, ${color} 20px), repeating-linear-gradient(270deg, ${color}, ${color} 10px, white 10px, white 20px, ${color} 20px)`,
-        backgroundSize: '2px 100%, 100% 2px, 2px 100% , 100% 2px',
-        backgroundPosition: '0 0, 0 0, 100% 0, 0 100%',
-        backgroundRepeat: 'no-repeat',
-        borderRadius: '4px',
-        position: 'relative',
-        height: '300px',
-        width: '100%',
-        display: 'flex',
+        borderColor: 'primary.main',
+        borderStyle: 'dashed',
+        borderWidth: '4px',
+        borderRadius: '8px',
+        flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        display: 'flex',
         flexDirection: 'column',
-        flex: 1,
       }}
     >
       <input {...getInputProps()} data-testid="rsi-dropzone" />
@@ -97,8 +91,8 @@ export const DropZone = ({ onContinue, isLoading }: DropZoneProps) => {
         <Typography>{translations.uploadStep.dropzone.loadingTitle}</Typography>
       ) : (
         <>
-          <Typography>{translations.uploadStep.dropzone.title}</Typography>
-          <Button variant={'contained'} onClick={open}>
+          <Typography paragraph>{translations.uploadStep.dropzone.title}</Typography>
+          <Button size="large" variant="contained" onClick={open}>
             {translations.uploadStep.dropzone.buttonTitle}
           </Button>
         </>

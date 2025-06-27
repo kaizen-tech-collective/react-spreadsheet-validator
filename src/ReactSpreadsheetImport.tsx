@@ -1,7 +1,9 @@
 import * as React from 'react';
 
-import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+
+import CloseIcon from '@mui/icons-material/Close';
 
 import HorizontalStepper from './components/Stepper';
 import { Providers } from './Providers';
@@ -27,12 +29,29 @@ export const defaultRSIProps: Partial<RsiProps<any>> = {
 };
 
 export const ReactSpreadsheetImport = <T extends string>(props: RsiProps<T>) => {
+  const { isOpen, onClose } = props;
+
+  const handleClose = React.useCallback(() => {
+    onClose();
+  }, [onClose]);
+
   return (
     <Providers rsiValues={{ ...props, translations }}>
-      <Dialog fullWidth maxWidth={'lg'} open={props.isOpen} onClose={props.onClose}>
-        <Box>
-          <HorizontalStepper />
-        </Box>
+      <Dialog
+        fullScreen
+        open={isOpen}
+        onClose={handleClose}
+        sx={{ m: '32px' }}
+        slotProps={{
+          paper: {
+            sx: { borderRadius: '24px' },
+          },
+        }}
+      >
+        <IconButton size="small" sx={{ position: 'fixed', top: '8px', right: '8px' }}>
+          <CloseIcon fontSize="small" color="disabled" />
+        </IconButton>
+        <HorizontalStepper />
       </Dialog>
     </Providers>
   );

@@ -9,9 +9,31 @@ import { ReactSpreadsheetImport } from './ReactSpreadsheetImport';
 
 const fields = [
   {
-    label: 'Name',
-    key: 'name',
-    alternateMatches: ['first name', 'first'],
+    label: 'Student ID',
+    key: 'studentId',
+    alternateMatches: ['id', 'student id', 'student number'],
+    fieldType: {
+      type: 'input',
+    },
+    example: 'e6304505',
+    validations: [
+      {
+        rule: 'required',
+        errorMessage: 'First name is required',
+        level: 'error',
+      },
+      {
+        rule: 'unique',
+        allowEmpty: false,
+        errorMessage: 'Student ID must be unique',
+        level: 'error',
+      },
+    ],
+  },
+  {
+    label: 'First Name',
+    key: 'firstName',
+    alternateMatches: ['first name', 'first', 'name'],
     fieldType: {
       type: 'input',
     },
@@ -19,72 +41,48 @@ const fields = [
     validations: [
       {
         rule: 'required',
-        errorMessage: 'Name is required',
+        errorMessage: 'First name is required',
+        level: 'error',
       },
     ],
   },
   {
-    label: 'Surname',
-    key: 'surname',
-    alternateMatches: ['second name', 'last name', 'last'],
+    label: 'Last Name',
+    key: 'lastName',
+    alternateMatches: ['second name', 'last name', 'last', 'surname'],
     fieldType: {
       type: 'input',
     },
     example: 'McDonald',
     validations: [
       {
-        rule: 'unique',
-        errorMessage: 'Last name must be unique',
-        level: 'info',
-      },
-    ],
-    description: 'Family / Last name',
-  },
-  {
-    label: 'Age',
-    key: 'age',
-    alternateMatches: ['years'],
-    fieldType: {
-      type: 'input',
-    },
-    example: '23',
-    validations: [
-      {
-        rule: 'regex',
-        value: '^\\d+$',
-        errorMessage: 'Age must be a number',
-        level: 'warning',
+        rule: 'required',
+        errorMessage: 'Last name is required',
+        level: 'error',
       },
     ],
   },
   {
-    label: 'Team',
-    key: 'team',
-    alternateMatches: ['department'],
+    label: 'Grade',
+    key: 'grade',
+    alternateMatches: ['year', 'class', 'level'],
     fieldType: {
       type: 'select',
       options: [
-        { label: 'Team One', value: 'one' },
-        { label: 'Team Two', value: 'two' },
+        { label: '9th Grade', value: '9' },
+        { label: '10th Grade', value: '10' },
+        { label: '11th Grade', value: '11' },
+        { label: '12th Grade', value: '12' },
       ],
     },
-    example: 'Team one',
+    example: '9th Grade',
     validations: [
       {
         rule: 'required',
-        errorMessage: 'Team is required',
+        errorMessage: 'Grade is required',
+        level: 'error',
       },
     ],
-  },
-  {
-    label: 'Is manager',
-    key: 'is_manager',
-    alternateMatches: ['manages'],
-    fieldType: {
-      type: 'checkbox',
-      booleanMatches: {},
-    },
-    example: 'true',
   },
 ] as const;
 
