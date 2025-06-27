@@ -24,7 +24,7 @@ export const translations = {
   },
   matchColumnsStep: {
     title: 'Match Columns',
-    nextButtonTitle: 'Next',
+    nextButtonTitle: 'Next Step',
     userTableTitle: 'Your table',
     templateTitle: 'Will become',
     selectPlaceholder: 'Select column...',

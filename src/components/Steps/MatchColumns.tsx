@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
 
@@ -160,7 +161,7 @@ export const MatchColumnsStep = <T extends string>({ data, headerValues, onConti
     return findUnmatchedRequiredFields(fields, columns);
   }, [fields, columns]);
 
-  const handleOnContinue = React.useCallback(async () => {
+  const handleContinue = React.useCallback(async () => {
     if (unmatchedRequiredFields.length > 0) {
       // setShowUnmatchedFieldsAlert(true);
       alert(translations.alerts.unmatchedRequiredFields.headerTitle);
@@ -180,39 +181,47 @@ export const MatchColumnsStep = <T extends string>({ data, headerValues, onConti
   // }, [onContinue, columns, data, fields]);
 
   return (
-    <>
-      {/*<UnmatchedFieldsAlert*/}
-      {/*    isOpen={showUnmatchedFieldsAlert}*/}
-      {/*    onClose={() => setShowUnmatchedFieldsAlert(false)}*/}
-      {/*    fields={unmatchedRequiredFields}*/}
-      {/*    onConfirm={handleAlertOnContinue}*/}
-      {/*/>*/}
-      <Typography variant={'h4'} gutterBottom>
-        {translations.matchColumnsStep.title}
-      </Typography>
-      <ColumnGrid
-        columns={columns}
-        onContinue={handleOnContinue}
-        isLoading={isLoading}
-        userColumn={column => (
-          <UserTableColumn
-            column={column}
-            onIgnore={onIgnore}
-            onRevertIgnore={onRevertIgnore}
-            entries={dataExample.map(row => {
-              return row[column.index];
-            })}
-          />
-        )}
-        templateColumn={column => {
-          return <TemplateColumn column={column} onChange={onChange} onSubChange={onSubChange} />;
-        }}
-      />
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      {/* <UnmatchedFieldsAlert
+        isOpen={showUnmatchedFieldsAlert}
+        onClose={() => setShowUnmatchedFieldsAlert(false)}
+        fields={unmatchedRequiredFields}
+        onConfirm={handleAlertOnContinue}
+      /> */}
       {isLoading ? (
-        <>{'Loading...'}</>
+        // TODO: Abstract this to a re-usable component between steps
+        <Box
+          sx={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', display: 'flex', flexDirection: 'column' }}
+        >
+          <CircularProgress size="80px" />
+          <Typography variant="h6" color="text.secondary">
+            <strong>Processing...</strong>
+          </Typography>
+        </Box>
       ) : (
-        <DialogActions>
-          <Box
+        <>
+          <Typography variant="h5" sx={{ mb: '32px' }}>
+            {translations.matchColumnsStep.title}
+          </Typography>
+          <ColumnGrid
+            columns={columns}
+            onContinue={handleContinue}
+            isLoading={isLoading}
+            userColumn={column => (
+              <UserTableColumn
+                column={column}
+                onIgnore={onIgnore}
+                onRevertIgnore={onRevertIgnore}
+                entries={dataExample.map(row => {
+                  return row[column.index];
+                })}
+              />
+            )}
+            templateColumn={column => {
+              return <TemplateColumn column={column} onChange={onChange} onSubChange={onSubChange} />;
+            }}
+          />
+          <DialogActions
             sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -220,12 +229,18 @@ export const MatchColumnsStep = <T extends string>({ data, headerValues, onConti
               pt: 2,
             }}
           >
-            <Button variant={'contained'} onClick={handleOnContinue} style={{ width: 300 }}>
+            <Button
+              variant="contained"
+              style={{ width: 300 }}
+              onClick={() => {
+                return handleContinue();
+              }}
+            >
               {translations.matchColumnsStep.nextButtonTitle}
             </Button>
-          </Box>
-        </DialogActions>
+          </DialogActions>
+        </>
       )}
-    </>
+    </Box>
   );
 };

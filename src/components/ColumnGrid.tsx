@@ -36,13 +36,13 @@ export const ColumnGrid = <T extends string>({
         gridTemplateColumns={`0.75rem repeat(${columns.length}, minmax(18rem, auto)) 0.75rem`}
       >
         <Box gridColumn={`1/${columns.length + 3}`}>
-          <Typography variant={'h5'} gutterBottom>
+          <Typography variant="h6" sx={{ mb: '16px' }}>
             {translations.matchColumnsStep.userTableTitle}
           </Typography>
         </Box>
         <>
           {columns.map((column, index) => (
-            <Box gridRow="2/3" gridColumn={`${index + 2}/${index + 3}`} pt={3} key={column.header + index}>
+            <Box gridRow="2/3" gridColumn={`${index + 2}/${index + 3}`} pt="12px" key={column.header + index}>
               {userColumn(column)}
             </Box>
           ))}

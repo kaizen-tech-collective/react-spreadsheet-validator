@@ -89,6 +89,7 @@ const fields = [
 export const App = () => {
   const [data, setData] = React.useState<Result<any> | null>(null);
   const [open, setOpen] = React.useState<boolean>(false);
+
   return (
     <>
       <Box display="flex" gap="1" alignItems="center">

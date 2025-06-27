@@ -3,6 +3,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
+import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
 
 import { GridRowSelectionModel } from '@mui/x-data-grid';
@@ -60,7 +61,7 @@ export const SelectHeaderStep = ({ data, onContinue }: SelectHeaderProps) => {
             {translations.selectHeaderStep.title}
           </Typography>
           <SelectHeaderTable data={data} selectedRows={selectedRows} setSelectedRows={setSelectedRows} />
-          <Box
+          <DialogActions
             sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -77,7 +78,7 @@ export const SelectHeaderStep = ({ data, onContinue }: SelectHeaderProps) => {
             >
               {translations.selectHeaderStep.nextButtonTitle}
             </Button>
-          </Box>
+          </DialogActions>
         </>
       )}
     </Box>

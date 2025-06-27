@@ -29,21 +29,31 @@ export const UserTableColumn = <T extends string>(props: UserTableColumnProps<T>
   const isIgnored = type === ColumnType.ignored;
   return (
     <>
-      <Box sx={{ padding: 2, justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
-        <Typography color={isIgnored ? '#a0aec0' : 'black'}>{header}</Typography>
-        {type === ColumnType.ignored ? (
-          <IconButton aria-labelledby="Ignore column" onClick={() => onRevertIgnore(index)}>
-            <UndoIcon />
-          </IconButton>
-        ) : (
-          <IconButton aria-labelledby="Ignore column" onClick={() => onIgnore(index)}>
-            <CloseIcon />
-          </IconButton>
-        )}
+      <Box sx={{ justifyContent: 'space-between', alignItems: 'center', display: 'flex' }}>
+        <Typography variant="subtitle2" color={isIgnored ? '#a0aec0' : 'black'} sx={{ px: '24px', py: '16px' }}>
+          {header}
+        </Typography>
+        <Box sx={{ mr: '50px' }}>
+          {type === ColumnType.ignored ? (
+            <IconButton size="small" aria-labelledby="Ignore column" onClick={() => onRevertIgnore(index)}>
+              <UndoIcon fontSize="small" />
+            </IconButton>
+          ) : (
+            <IconButton size="small" aria-labelledby="Ignore column" onClick={() => onIgnore(index)}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          )}
+        </Box>
       </Box>
-      <Box sx={{ padding: 2, justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
+      <Box sx={{ justifyContent: 'space-between', alignItems: 'center', marginBottom: 2 }}>
         {entries.map((entry, index) => (
-          <Typography key={(entry || '') + index} data-ignored={isIgnored}>
+          <Typography
+            variant="body2"
+            key={(entry || '') + index}
+            data-ignored={isIgnored}
+            sx={{ px: '24px', py: '16px' }}
+            color={isIgnored ? '#a0aec0' : 'black'}
+          >
             {entry}
           </Typography>
         ))}
