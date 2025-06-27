@@ -15,16 +15,16 @@ export const translations = {
     },
     selectSheet: {
       title: 'Select the sheet to use',
-      nextButtonTitle: 'Next',
+      nextButtonTitle: 'Next Step',
     },
   },
   selectHeaderStep: {
     title: 'Select header row',
-    nextButtonTitle: 'Next',
+    nextButtonTitle: 'Next Step',
   },
   matchColumnsStep: {
     title: 'Match Columns',
-    nextButtonTitle: 'Next',
+    nextButtonTitle: 'Next Step',
     userTableTitle: 'Your table',
     templateTitle: 'Will become',
     selectPlaceholder: 'Select column...',
@@ -40,7 +40,7 @@ export const translations = {
     nextButtonTitle: 'Confirm',
     noRowsMessage: 'No data found',
     noRowsMessageWhenFiltered: 'No data containing errors',
-    discardButtonTitle: 'Discard selected rows',
+    discardButtonTitle: 'Delete selected rows',
     filterSwitchTitle: 'Show only rows with errors',
   },
   alerts: {

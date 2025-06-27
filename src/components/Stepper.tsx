@@ -6,7 +6,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
-import StepButton from '@mui/material/StepButton';
+import StepLabel, { stepLabelClasses } from '@mui/material/StepLabel';
+import { stepIconClasses } from '@mui/material/StepIcon';
 
 import { useRsi } from '../hooks/useRsi';
 import { StepState, StepType } from '../types';
@@ -150,18 +151,60 @@ const HorizontalStepper = () => {
 
   return (
     <>
-      <DialogTitle>
+      <DialogTitle component="div" sx={{ py: '24px', px: '32px' }}>
         <Stepper nonLinear activeStep={activeStep}>
           {steps.map((label, index) => (
             <Step key={label} completed={completed[index]}>
-              <StepButton color="inherit" disableRipple={true} style={{ cursor: 'default' }}>
+              <StepLabel
+                slotProps={{
+                  label: {
+                    sx: theme => {
+                      return {
+                        fontSize: '1rem',
+                        lineHeight: '1.5',
+
+                        [`&.${stepLabelClasses.active}, &.${stepLabelClasses.completed}`]: {
+                          fontWeight: theme.typography.fontWeightBold,
+                        },
+                      };
+                    },
+                  },
+                  stepIcon: {
+                    sx: theme => {
+                      const incompleteBgColor = theme.palette.grey[300];
+
+                      return {
+                        color: incompleteBgColor,
+                        height: '32px',
+                        width: '32px',
+
+                        [`& .${stepIconClasses.text}`]: {
+                          fill: theme.palette.common.white,
+                        },
+
+                        [`&.${stepIconClasses.active}`]: {
+                          color: incompleteBgColor,
+                          outlineColor: 'primary.main',
+                          outlineWidth: '2px',
+                          outlineStyle: 'solid',
+                          borderRadius: '50%',
+
+                          [`& .${stepIconClasses.text}`]: {
+                            fill: theme.palette.text.primary,
+                          },
+                        },
+                      };
+                    },
+                  },
+                }}
+              >
                 {label}
-              </StepButton>
+              </StepLabel>
             </Step>
           ))}
         </Stepper>
       </DialogTitle>
-      <DialogContent>{stepsContent[activeStep]}</DialogContent>
+      <DialogContent sx={{ p: 0, m: '32px' }}>{stepsContent[activeStep]}</DialogContent>
     </>
   );
 };

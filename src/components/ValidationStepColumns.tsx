@@ -34,7 +34,7 @@ function generateValidationStepColumns<T extends string>(fields: Fields<T>): Gri
     return {
       field: field.key,
       headerName: field.label,
-      minWidth: 150,
+      minWidth: 300,
       editable: true,
       cellClassName: params => {
         const error = params.row.__errors?.[field.key];

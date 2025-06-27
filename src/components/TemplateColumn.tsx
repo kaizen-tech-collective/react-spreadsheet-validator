@@ -50,7 +50,9 @@ export const TemplateColumn = <T extends string>({ column, onChange, onSubChange
   return (
     <Box sx={{ minHeight: 10, width: '100%', flexDirection: 'column', justifyContent: 'center' }}>
       {isIgnored ? (
-        <Typography color={'#a0aec0'}>{translations.matchColumnsStep.ignoredColumnText}</Typography>
+        <Typography sx={{ py: '16px' }} color="#a0aec0">
+          {translations.matchColumnsStep.ignoredColumnText}
+        </Typography>
       ) : (
         <>
           <Grid container>
@@ -67,18 +69,20 @@ export const TemplateColumn = <T extends string>({ column, onChange, onSubChange
             </Grid>
             <Grid size={2} display={'flex'} style={{ alignItems: 'center', justifyContent: 'center' }}>
               {isChecked ? (
-                <CheckCircleIcon color="success" sx={{ fontSize: '1.5rem' }} />
+                <CheckCircleIcon fontSize="large" color="primary" />
               ) : (
-                <CircleOutlinedIcon color="warning" sx={{ fontSize: '1.5rem' }} />
+                <CircleOutlinedIcon fontSize="large" color="disabled" />
               )}
             </Grid>
           </Grid>
           {isSelect && (
             <Box width="100%">
-              <Accordion>
+              <Accordion elevation={0}>
                 <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
                   <Box textAlign="left">
-                    <Typography>{getAccordionTitle<T>(fields, column, translations)}</Typography>
+                    <Typography sx={{ color: 'primary.light' }}>
+                      {getAccordionTitle<T>(fields, column, translations)}
+                    </Typography>
                   </Box>
                 </AccordionSummary>
                 <Stack>

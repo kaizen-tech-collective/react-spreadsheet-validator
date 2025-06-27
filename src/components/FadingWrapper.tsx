@@ -11,13 +11,15 @@ export const FadingWrapper = ({ gridColumn, gridRow }: FadingWrapperProps) => {
   return (
     <>
       <Box
-        sx={{
-          gridColumn: { gridColumn },
-          gridRow: { gridRow },
-          borderRadius: '1.2rem',
-          border: '1px solid',
-          // borderColor:"border",
-          pointerEvents: 'none',
+        sx={theme => {
+          return {
+            gridColumn: { gridColumn },
+            gridRow: { gridRow },
+            borderRadius: '1.2rem',
+            border: '1px solid',
+            borderColor: theme.palette.divider,
+            pointerEvents: 'none',
+          };
         }}
       />
       <Box
