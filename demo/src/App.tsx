@@ -3,9 +3,9 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
-import { Result } from '../src/types';
-
-import { ReactSpreadsheetImport } from './ReactSpreadsheetImport';
+// Import from the package as if it's a published dependency
+import { ReactSpreadsheetImport } from '@kaizen-tech-collective/react-spreadsheet-validator';
+import type { Result } from '@kaizen-tech-collective/react-spreadsheet-validator';
 
 const fields = [
   {
@@ -108,7 +108,7 @@ export const App = () => {
         onClose={() => {
           return setOpen(false);
         }}
-        onSubmit={data => {
+        onSubmit={(data: Result<any>) => {
           setData(data);
         }}
       />

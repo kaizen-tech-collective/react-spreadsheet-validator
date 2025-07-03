@@ -22,16 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-src/graphql/schema.graphql
-src/graphql/generated/*
-.env
-.env.qa
-.yarn
-
-# coverage
-coverage
-
-# Demo app
-demo/node_modules
-demo/dist
-demo/.env*
