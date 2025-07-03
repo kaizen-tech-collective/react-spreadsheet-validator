@@ -8,7 +8,17 @@ const packageJson = require('./package.json');
 
 export default [
   {
-    input: 'src/ReactSpreadsheetImport.tsx',
+    input: 'src/index.tsx',
+    external: [
+      'react',
+      'react-dom',
+      '@emotion/react',
+      '@emotion/styled',
+      '@mui/material',
+      '@mui/icons-material',
+      '@mui/x-data-grid',
+      '@mui/system',
+    ],
     output: [
       {
         file: packageJson.main,
@@ -27,10 +37,20 @@ export default [
       }
       warn(warning); // show everything else
     },
-    plugins: [peerDepsExternal(), resolve(), commonjs(), typescript({ tsconfig: './tsconfig.json' })],
+    plugins: [
+      peerDepsExternal(),
+      resolve({
+        browser: true,
+        preferBuiltins: false,
+      }),
+      commonjs({
+        include: ['node_modules/**'],
+      }),
+      typescript(),
+    ],
   },
   {
-    input: 'src/ReactSpreadsheetImport.tsx',
+    input: 'src/index.tsx',
     output: [{ file: 'dist/index.d.ts', format: 'es' }],
     plugins: [dts()],
   },

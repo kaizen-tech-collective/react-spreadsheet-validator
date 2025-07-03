@@ -1,9 +1,8 @@
-import * as React from 'react';
-import { createRoot } from 'react-dom/client';
-
-import App from './App';
+// Main library exports
 export { ReactSpreadsheetImport } from './ReactSpreadsheetImport';
 
-const container = document.getElementById('root');
-const root = createRoot(container!); // createRoot(container!) if you use TypeScript
-root.render(<App />);
+// Export types
+export type * from './types';
+
+// Export translation types
+export type { TranslationsRSIProps } from './translationsRSIProps';

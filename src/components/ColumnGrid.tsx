@@ -22,8 +22,8 @@ export const ColumnGrid = <T extends string>({
   columns,
   userColumn,
   templateColumn,
-  onContinue,
-  isLoading,
+  onContinue: _onContinue,
+  isLoading: _isLoading,
 }: ColumnGridProps<T>) => {
   const { translations } = useRsi();
   // const styles = useStyleConfig("MatchColumnsStep") as Styles
