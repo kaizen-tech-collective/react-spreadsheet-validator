@@ -92,6 +92,30 @@ const ValidationStep = <T extends string>({ initialData, file }: Props<T>) => {
     return data;
   }, [data, activeFilter]);
 
+  const { errorRowCount, warningRowCount } = React.useMemo(() => {
+    let errors = 0;
+    let warnings = 0;
+
+    data.forEach(row => {
+      if (row?.__errors) {
+        const hasErrors = Object.values(row.__errors).some(error => {
+          return error.level === 'error';
+        });
+        const hasWarnings = Object.values(row.__errors).some(error => {
+          return error.level === 'warning';
+        });
+
+        if (hasErrors) {
+          errors++;
+        } else if (hasWarnings) {
+          warnings++;
+        }
+      }
+    });
+
+    return { errorRowCount: errors, warningRowCount: warnings };
+  }, [data]);
+
   const onDelete = () => {
     if (selectedRows.ids.size > 0) {
       const newData = data.filter(row => {
@@ -183,7 +207,15 @@ const ValidationStep = <T extends string>({ initialData, file }: Props<T>) => {
         hideFooter
         slots={{
           toolbar: () => {
-            return <ValidationToolbar activeFilter={activeFilter} onFilterChange={handleFilterChange} />;
+            return (
+              <ValidationToolbar
+                activeFilter={activeFilter}
+                onFilterChange={handleFilterChange}
+                totalRows={data.length}
+                errorRows={errorRowCount}
+                warningRows={warningRowCount}
+              />
+            );
           },
         }}
         showToolbar
