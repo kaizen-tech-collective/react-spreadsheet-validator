@@ -15,7 +15,7 @@ import { StepState, StepType } from '../types';
 import { MatchColumnsStep } from './Steps/MatchColumns';
 import { SelectHeaderStep } from './Steps/SelectHeader';
 import Upload from './Steps/Upload';
-import { ValidationStep } from './Steps/Validation';
+import ValidationStep from './Steps/Validation';
 
 import { translations } from '../translationsRSIProps';
 

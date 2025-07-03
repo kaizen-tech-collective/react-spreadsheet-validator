@@ -3,24 +3,24 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import DialogActions from '@mui/material/DialogActions';
-import FormLabel from '@mui/material/FormLabel';
-import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
 import { DataGrid, GridRowModel, GridRowSelectionModel } from '@mui/x-data-grid';
 
-import { useRsi } from '../../hooks/useRsi';
-import type { Data, Meta } from '../../types';
+import { useRsi } from '../../../hooks/useRsi';
+import type { Data, Meta } from '../../../types';
 
-import { addErrorsAndRunHooks } from '../dataMutations';
-import generateValidationStepColumns, { validationStepColumnStyling } from '../ValidationStepColumns';
+import { addErrorsAndRunHooks } from '../../dataMutations';
+import generateValidationStepColumns, { validationStepColumnStyling } from '../../ValidationStepColumns';
+
+import ValidationToolbar, { ValidationFilterOptions } from './Toolbar';
 
 type Props<T extends string> = {
   initialData: Data<T>[];
   file: File;
 };
 
-export const ValidationStep = <T extends string>({ initialData, file }: Props<T>) => {
+const ValidationStep = <T extends string>({ initialData, file }: Props<T>) => {
   const { fields, onClose, onSubmit, rowHook, rtl, tableHook, translations } = useRsi<T>();
 
   const [data, setData] = React.useState<(Data<T> & Meta)[]>(
@@ -33,7 +33,7 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
     ids: new Set<number>([]),
   });
 
-  const [filterByErrors, setFilterByErrors] = React.useState(false);
+  const [activeFilter, setActiveFilter] = React.useState<ValidationFilterOptions>('all');
 
   const handleProcessRowUpdate = React.useCallback(
     (newRow: GridRowModel) => {
@@ -61,18 +61,36 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
   }, [fields]);
 
   const rows = React.useMemo(() => {
-    if (filterByErrors) {
+    if (activeFilter === 'errors') {
       return data.filter(value => {
         if (value?.__errors) {
-          return Object.values(value.__errors)?.filter(error => {
-            return error.level === 'error';
-          }).length;
+          return (
+            Object.values(value.__errors)?.filter(error => {
+              return error.level === 'error';
+            }).length > 0
+          );
+        }
+        return false;
+      });
+    } else if (activeFilter === 'warnings') {
+      return data.filter(value => {
+        if (value?.__errors) {
+          const hasWarnings =
+            Object.values(value.__errors)?.filter(error => {
+              return error.level === 'warning';
+            }).length > 0;
+          const hasErrors =
+            Object.values(value.__errors)?.filter(error => {
+              return error.level === 'error';
+            }).length > 0;
+          // Show warnings but exclude rows that also have errors
+          return hasWarnings && !hasErrors;
         }
         return false;
       });
     }
     return data;
-  }, [data, filterByErrors]);
+  }, [data, activeFilter]);
 
   const onDelete = () => {
     if (selectedRows.ids.size > 0) {
@@ -129,6 +147,10 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
     }
   };
 
+  const handleFilterChange = (filter: ValidationFilterOptions) => {
+    setActiveFilter(filter);
+  };
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: '32px' }}>
@@ -137,14 +159,6 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
           <Button onClick={onDelete} size="small" variant="outlined" disabled={selectedRows.ids.size === 0}>
             {translations.validationStep.discardButtonTitle}
           </Button>
-          <Switch
-            sx={{ display: 'flex', alignItems: 'center' }}
-            checked={filterByErrors}
-            onChange={() => {
-              return setFilterByErrors(!filterByErrors);
-            }}
-          />
-          <FormLabel component="legend">{translations.validationStep.filterSwitchTitle}</FormLabel>
         </Box>
       </Box>
       {/*
@@ -167,6 +181,12 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
         disableColumnMenu
         processRowUpdate={handleProcessRowUpdate}
         hideFooter
+        slots={{
+          toolbar: () => {
+            return <ValidationToolbar activeFilter={activeFilter} onFilterChange={handleFilterChange} />;
+          },
+        }}
+        showToolbar
         sx={{
           ...validationStepColumnStyling,
           direction: rtl ? 'rtl' : 'ltr',
@@ -193,3 +213,5 @@ export const ValidationStep = <T extends string>({ initialData, file }: Props<T>
     </Box>
   );
 };
+
+export default ValidationStep;
