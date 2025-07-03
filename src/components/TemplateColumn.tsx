@@ -80,7 +80,7 @@ export const TemplateColumn = <T extends string>({ column, onChange, onSubChange
               <Accordion elevation={0}>
                 <AccordionSummary aria-controls="panel1a-content" id="panel1a-header">
                   <Box textAlign="left">
-                    <Typography sx={{ color: 'primary.light' }}>
+                    <Typography sx={{ color: 'primary.main' }}>
                       {getAccordionTitle<T>(fields, column, translations)}
                     </Typography>
                   </Box>

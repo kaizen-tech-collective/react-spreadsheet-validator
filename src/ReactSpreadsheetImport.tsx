@@ -38,6 +38,7 @@ export const ReactSpreadsheetImport = <T extends string>(props: RsiProps<T>) => 
   return (
     <Providers rsiValues={{ ...props, translations }}>
       <Dialog
+        disableEscapeKeyDown
         fullScreen
         open={isOpen}
         onClose={handleClose}
