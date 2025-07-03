@@ -17,7 +17,14 @@ import { SelectHeaderStep } from './Steps/SelectHeader';
 import Upload from './Steps/Upload';
 import { ValidationStep } from './Steps/Validation';
 
-const steps = ['Upload file', 'Select header row', 'Match columns', 'Validate data'];
+import { translations } from '../translationsRSIProps';
+
+const steps = [
+  translations.uploadStep.title,
+  translations.selectHeaderStep.title,
+  translations.matchColumnsStep.title,
+  translations.validationStep.title,
+];
 
 export const exceedsMaxRecords = (workSheet: XLSX.WorkSheet, maxRecords: number) => {
   const [top, bottom] =

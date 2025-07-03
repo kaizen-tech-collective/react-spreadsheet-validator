@@ -19,7 +19,7 @@ export const translations = {
     },
   },
   selectHeaderStep: {
-    title: 'Select header row',
+    title: 'Select Row for Data Labels',
     nextButtonTitle: 'Next Step',
   },
   matchColumnsStep: {
