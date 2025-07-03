@@ -48,8 +48,8 @@ export const ReactSpreadsheetImport = <T extends string>(props: RsiProps<T>) => 
           },
         }}
       >
-        <IconButton size="small" sx={{ position: 'fixed', top: '8px', right: '8px' }}>
-          <CloseIcon fontSize="small" color="disabled" />
+        <IconButton onClick={handleClose} size="small" sx={{ position: 'fixed', top: '8px', right: '8px' }}>
+          <CloseIcon fontSize="small" sx={{ color: 'common.white' }} />
         </IconButton>
         <HorizontalStepper />
       </Dialog>
