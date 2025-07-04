@@ -180,9 +180,11 @@ const ValidationStep = <T extends string>({ initialData, file }: Props<T>) => {
       <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: '32px' }}>
         <Typography variant="h5">{translations.validationStep.title}</Typography>
         <Box display="flex" gap="16px" alignItems="center">
-          <Button onClick={onDelete} size="small" variant="outlined" disabled={selectedRows.ids.size === 0}>
-            {translations.validationStep.discardButtonTitle}
-          </Button>
+          {selectedRows.ids.size ? (
+            <Button onClick={onDelete} size="small" variant="outlined">
+              Delete {selectedRows.ids.size} Selected {selectedRows.ids.size === 1 ? 'Row' : 'Rows'}
+            </Button>
+          ) : null}
         </Box>
       </Box>
       {/*
