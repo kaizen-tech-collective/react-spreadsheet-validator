@@ -2,9 +2,8 @@ import * as React from 'react';
 
 import { DataGrid, gridClasses } from '@mui/x-data-grid';
 
-import { Field, Fields } from '../types';
-
-import { generateColumns } from './columns';
+import { Field, Fields } from '../../../../types';
+import { generateColumns } from '../../../columns';
 
 interface Props<T extends string> {
   fields: Fields<T>;
@@ -32,7 +31,7 @@ export const generateExampleRow = <T extends string>(fields: Fields<T>) => {
   ];
 };
 
-export const ExampleTable = <T extends string>({ fields }: Props<T>) => {
+const ExampleTable = <T extends string>({ fields }: Props<T>) => {
   const rows = React.useMemo(() => {
     return generateExampleRow(fields);
   }, [fields]);
@@ -49,14 +48,41 @@ export const ExampleTable = <T extends string>({ fields }: Props<T>) => {
       disableColumnFilter
       disableColumnMenu
       disableRowSelectionOnClick
+      disableColumnResize
+      disableVirtualization={false}
+      disableMultipleRowSelection
+      disableDensitySelector
+      disableEval
       sx={{
-        [`.${gridClasses.virtualScroller}`]: {
+        [`.${gridClasses.virtualScroller}, .${gridClasses.scrollbar}`]: {
           overflow: 'hidden',
         },
         [`.${gridClasses.row}:hover`]: {
           backgroundColor: 'inherit',
         },
+        [`.${gridClasses.cell}`]: {
+          cursor: 'default',
+        },
+        [`.${gridClasses.columnHeader}`]: {
+          cursor: 'default',
+        },
+        [`& .${gridClasses.cell}:focus`]: {
+          outline: 'none',
+        },
+        [`& .${gridClasses.columnHeader}:focus`]: {
+          outline: 'none',
+        },
+        [`& .${gridClasses.columnHeader}:focus-within`]: {
+          outline: 'none',
+        },
+        [`& .${gridClasses.columnSeparator}, & .${gridClasses.columnHeader}:focus .${gridClasses.columnSeparator}`]: {
+          display: 'flex !important',
+          visibility: 'visible !important',
+          opacity: '1 !important',
+        },
       }}
     />
   );
 };
+
+export default ExampleTable;

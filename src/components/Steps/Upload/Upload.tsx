@@ -5,9 +5,10 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 
-import { useRsi } from '../../hooks/useRsi';
-import { ExampleTable } from '../ExampleTable';
-import { DropZone } from '../DropZone';
+import { useRsi } from '../../../hooks/useRsi';
+import { DropZone } from '../../DropZone';
+
+import ExampleTable from './ExampleTable';
 
 type UploadProps = {
   onContinue: (data: XLSX.WorkBook, file: File) => Promise<void>;
