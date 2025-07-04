@@ -24,7 +24,6 @@
     "demo:build:prod": "cd demo && yarn build:prod",
     "demo:install": "cd demo && yarn install",
     "prepublishOnly": "yarn build",
-    "publish": "npm publish",
     "npm:login": "npm login --scope=@kaizen-tech-collective --auth-type=legacy --registry=https://npm.pkg.github.com",
     "lint": "eslint src --ext .ts,.tsx --max-warnings 0",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
