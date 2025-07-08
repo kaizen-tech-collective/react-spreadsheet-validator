@@ -7,6 +7,11 @@ export type Meta = { __index: string; __errors?: Error | null };
 export type Error = { [key: string]: Info };
 export type Errors = { [id: string]: Error };
 
+export enum CloseReason {
+  close = 'close',
+  submit = 'submit',
+}
+
 export enum StepType {
   upload = 'upload',
   selectHeader = 'selectHeader',
@@ -36,7 +41,7 @@ export type RsiProps<T extends string> = {
   // Is modal visible.
   isOpen: boolean;
   // callback when RSI is closed before final submit
-  onClose: () => void;
+  onClose: (reason: CloseReason) => void;
   // Field description for requested data
   fields: Fields<T>;
   // Runs after file upload step, receives and returns raw sheet data

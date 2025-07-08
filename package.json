@@ -1,6 +1,6 @@
 {
   "name": "@kaizen-tech-collective/react-spreadsheet-validator",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Kaizen Tech Collective",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
@@ -19,17 +19,16 @@
   "scripts": {
     "build": "rollup -c rollup.config.ts --bundleConfigAsCjs",
     "build:watch": "rollup -c rollup.config.ts --bundleConfigAsCjs --watch",
-    "demo:dev": "cd demo && yarn dev",
+    "demo:start": "cd demo && yarn start",
     "demo:build": "cd demo && yarn build",
     "demo:build:prod": "cd demo && yarn build:prod",
     "demo:install": "cd demo && yarn install",
     "prepublishOnly": "yarn build",
-    "publish": "npm publish",
     "npm:login": "npm login --scope=@kaizen-tech-collective --auth-type=legacy --registry=https://npm.pkg.github.com",
     "lint": "eslint src --ext .ts,.tsx --max-warnings 0",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "clean": "rm -rf dist",
-    "dev:full": "yarn demo:install && concurrently \"yarn build:watch\" \"yarn demo:dev\""
+    "dev:full": "yarn demo:install && concurrently \"yarn build:watch\" \"yarn demo:start\""
   },
   "peerDependencies": {
     "@emotion/react": "^11.14.0",
