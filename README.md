@@ -52,7 +52,9 @@ function MyApp() {
   return (
     <ReactSpreadsheetImport
       isOpen={isOpen}
-      onClose={() => setIsOpen(false)}
+      onClose={() => {
+        setIsOpen(false);
+      }}
       onSubmit={data => console.log(data)}
       fields={fields}
     />

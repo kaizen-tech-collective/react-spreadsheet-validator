@@ -8,7 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import HorizontalStepper from './components/Stepper';
 import { Providers } from './Providers';
 import { translations } from './translationsRSIProps';
-import { RsiProps } from './types';
+import { CloseReason, RsiProps } from './types';
 
 export const defaultRSIProps: Partial<RsiProps<any>> = {
   autoMapHeaders: true,
@@ -32,7 +32,7 @@ export const ReactSpreadsheetImport = <T extends string>(props: RsiProps<T>) => 
   const { isOpen, onClose } = props;
 
   const handleClose = React.useCallback(() => {
-    onClose();
+    onClose(CloseReason.close);
   }, [onClose]);
 
   return (

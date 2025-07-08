@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { DataGrid, GridRowModel, GridRowSelectionModel } from '@mui/x-data-grid';
 
 import { useRsi } from '../../../hooks/useRsi';
-import type { Data, Meta } from '../../../types';
+import { CloseReason, Data, Meta } from '../../../types';
 
 import { addErrorsAndRunHooks } from '../../dataMutations';
 import generateValidationStepColumns, { validationStepColumnStyling } from '../../ValidationStepColumns';
@@ -167,7 +167,7 @@ const ValidationStep = <T extends string>({ initialData, file }: Props<T>) => {
         { validData: [] as Data<T>[], invalidData: [] as Data<T>[], all: data },
       );
       onSubmit(calculatedData, file);
-      onClose();
+      onClose(CloseReason.submit);
     }
   };
 
