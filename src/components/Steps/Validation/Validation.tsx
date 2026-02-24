@@ -132,7 +132,12 @@ const ValidationStep = <T extends string>({ initialData, file }: Props<T>) => {
   };
 
   const onContinue = () => {
-    const invalidData = data.find(value => {
+    const activeData =
+      selectedRows.ids.size > 0
+        ? data.filter(row => selectedRows.ids.has(row.__index))
+        : data;
+
+    const invalidData = activeData.find(value => {
       if (value?.__errors) {
         return !!Object.values(value.__errors)?.filter(err => {
           return err.level === 'error';
@@ -150,7 +155,7 @@ const ValidationStep = <T extends string>({ initialData, file }: Props<T>) => {
     }
 
     if (submit) {
-      const calculatedData = data.reduce(
+      const calculatedData = activeData.reduce(
         (acc, value) => {
           const { __index, __errors, ...values } = value;
           if (__errors) {
@@ -164,7 +169,7 @@ const ValidationStep = <T extends string>({ initialData, file }: Props<T>) => {
           acc.validData.push(values as unknown as Data<T>);
           return acc;
         },
-        { validData: [] as Data<T>[], invalidData: [] as Data<T>[], all: data },
+        { validData: [] as Data<T>[], invalidData: [] as Data<T>[], all: activeData },
       );
       onSubmit(calculatedData, file);
       onClose(CloseReason.submit);
@@ -207,17 +212,15 @@ const ValidationStep = <T extends string>({ initialData, file }: Props<T>) => {
         disableColumnMenu
         processRowUpdate={handleProcessRowUpdate}
         hideFooter
-        slots={{
-          toolbar: () => {
-            return (
-              <ValidationToolbar
-                activeFilter={activeFilter}
-                onFilterChange={handleFilterChange}
-                totalRows={data.length}
-                errorRows={errorRowCount}
-                warningRows={warningRowCount}
-              />
-            );
+        slots={{ toolbar: ValidationToolbar }}
+        slotProps={{
+          toolbar: {
+            activeFilter,
+            onFilterChange: handleFilterChange,
+            totalRows: data.length,
+            selectedRowCount: selectedRows.ids.size,
+            errorRows: errorRowCount,
+            warningRows: warningRowCount,
           },
         }}
         showToolbar
@@ -237,6 +240,7 @@ const ValidationStep = <T extends string>({ initialData, file }: Props<T>) => {
         <Button
           variant="contained"
           style={{ width: 300 }}
+          disabled={selectedRows.ids.size === 0}
           onClick={() => {
             return onContinue();
           }}

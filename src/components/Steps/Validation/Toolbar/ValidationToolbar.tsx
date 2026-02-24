@@ -10,8 +10,13 @@ import { FilterChips, type ValidationFilterOptions, type FilterChipsProps } from
 
 export type { ValidationFilterOptions };
 
-interface ValidationToolbarProps extends FilterChipsProps {
+export interface ValidationToolbarProps extends FilterChipsProps {
   totalRows: number;
+  selectedRowCount: number;
+}
+
+declare module '@mui/x-data-grid' {
+  interface ToolbarPropsOverrides extends ValidationToolbarProps {}
 }
 
 /**
@@ -22,15 +27,19 @@ const ValidationToolbar = ({
   activeFilter,
   onFilterChange,
   totalRows,
+  selectedRowCount,
   errorRows,
   warningRows,
 }: ValidationToolbarProps) => {
+  const displayCount = selectedRowCount > 0 ? selectedRowCount : totalRows;
+  const label = selectedRowCount > 0 ? 'selected row' : 'row';
+
   return (
     <Toolbar>
       <Typography sx={{ flex: 1, ml: 0.5 }}>
         Preparing to upload{' '}
         <strong>
-          {totalRows.toLocaleString()} {totalRows === 1 ? 'row' : 'rows'}
+          {displayCount.toLocaleString()} {displayCount === 1 ? label : `${label}s`}
         </strong>
       </Typography>
       <FilterChips

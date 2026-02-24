@@ -1,6 +1,6 @@
 {
   "name": "@kaizen-tech-collective/react-spreadsheet-validator",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "author": "Kaizen Tech Collective",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
