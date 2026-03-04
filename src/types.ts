@@ -105,6 +105,8 @@ export type Field<T extends string> = {
   fieldType: Checkbox | Select | Input;
   // UI-facing values shown to user as field examples pre-upload phase
   example?: string;
+  // Optional column width in pixels used to size the data grid column
+  columnWidth?: number;
 };
 
 export type Checkbox = {
